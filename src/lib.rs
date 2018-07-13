@@ -19,8 +19,7 @@ pub fn consume_gas(amount: u64) {
 }
 
 pub fn current_address() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::new();
-    ret.reserve(20);
+    let mut ret: Vec<u8> = Vec::with_capacity(20);
 
     unsafe {
         ethereum_getAddress(ret.as_mut_ptr() as *const u32);
@@ -30,8 +29,7 @@ pub fn current_address() -> Vec<u8> {
 }
 
 pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::new();
-    ret.reserve(16);
+    let mut ret: Vec<u8> = Vec::with_capacity(16);
 
     unsafe {
         ethereum_getBalance(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
@@ -42,8 +40,7 @@ pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
 
 #[warn(non_snake_case)]
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::new();
-    ret.reserve(length);
+    let mut ret: Vec<u8> = Vec::with_capacity(length);
 
     unsafe {
         ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
@@ -83,8 +80,7 @@ pub fn finish_data(data: Vec<u8>) -> ! {
 }
 
 pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::new();
-    ret.reserve(32);
+    let mut ret: Vec<u8> = Vec::with_capacity(32);
 
     unsafe {
         ethereum_storageLoad(key.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
