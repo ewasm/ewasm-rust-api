@@ -2,6 +2,7 @@ use std::vec::Vec;
 
 extern "C" {
     fn ethereum_useGas(amount: u64);
+    fn ethereum_getGasLeft() -> u64;
     fn ethereum_getAddress(resultOffset: *const u32);
     fn ethereum_getBalance(addressOffset: *const u32, resultOffset: *const u32);
     fn ethereum_revert(dataOffset: *const u32, length: u32) -> !;
@@ -18,6 +19,12 @@ extern "C" {
 pub fn consume_gas(amount: u64) {
     unsafe {
         ethereum_useGas(amount);
+    }
+}
+
+pub fn gas_left() -> u64 {
+    unsafe {
+        return ethereum_getGasLeft();
     }
 }
 
