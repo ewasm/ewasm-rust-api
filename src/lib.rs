@@ -10,6 +10,7 @@ extern "C" {
     fn ethereum_getCallDataSize() -> u32;
     fn ethereum_storageLoad(keyOffset: *const u32, resultOffset: *const u32);
     fn ethereum_storageStore(keyOffset: *const u32, valueOffset: *const u32);
+    fn ethereum_selfDestruct(addressOffset: *const u32) -> !;
 }
 
 pub fn consume_gas(amount: u64) {
@@ -96,5 +97,11 @@ pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
 pub fn storage_store(key: Vec<u8>, value: Vec<u8>) {
     unsafe {
         ethereum_storageStore(key.as_ptr() as *const u32, value.as_ptr() as *const u32);
+    }
+}
+
+pub fn selfdestruct(address: Vec<u8>) -> ! {
+    unsafe {
+        ethereum_selfDestruct(address.as_ptr() as *const u32);
     }
 }
