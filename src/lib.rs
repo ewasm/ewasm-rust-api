@@ -279,6 +279,9 @@ pub fn create(value: &[u8;16], data: &[u8]) -> CreateResult {
 }
 
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
+    // Ensure no overreading happens
+    assert!((calldata_size() - from) >= length);
+
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
@@ -312,6 +315,9 @@ pub fn callvalue() -> [u8;16] {
 }
 
 pub fn code_copy(from: usize, length: usize) -> Vec<u8> {
+    // Ensure no overreading happens
+    assert!((code_size() - from) >= length);
+
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
@@ -327,6 +333,9 @@ pub fn code_size() -> usize {
 }
 
 pub fn external_code_copy(address: &[u8;20], from: usize, length: usize) -> Vec<u8> {
+    // Ensure no overreading happens
+    assert!((external_code_size(address) - from) >= length);
+
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
@@ -343,6 +352,9 @@ pub fn external_code_size(address: &[u8;20]) -> usize {
 
 pub fn returndata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+
+    // Ensure no overreading happens
+    assert!((returndata_size() - from) >= length);
 
     unsafe {
         ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
