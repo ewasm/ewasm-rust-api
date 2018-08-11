@@ -113,11 +113,10 @@ pub fn block_coinbase() -> Vec<u8> {
 }
 
 pub fn block_difficulty() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(32);
+    let mut ret: Vec<u8> = alloc_hash();
 
     unsafe {
         ethereum_getBlockDifficulty(ret.as_mut_ptr() as *const u32);
-        ret.set_len(32);
     }
 
     return ret;
