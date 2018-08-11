@@ -143,6 +143,24 @@ pub fn tx_origin() -> Vec<u8> {
     return ret;
 }
 
+pub fn log(data: Vec<u8>, topics: Vec<Vec<u8>>) {
+    assert!(topics.len() <= 4);
+    for i in 0..topics.len() {
+        assert!(topics[i].len() == 32);
+    }
+    unsafe {
+        ethereum_log(
+            data.as_ptr() as *const u32,
+            data.len() as u32,
+            topics.len() as u32,
+            topics[0].as_ptr() as *const u32,
+            topics[1].as_ptr() as *const u32,
+            topics[2].as_ptr() as *const u32,
+            topics[3].as_ptr() as *const u32
+        );
+    }
+}
+
 #[warn(non_snake_case)]
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = Vec::with_capacity(length);
