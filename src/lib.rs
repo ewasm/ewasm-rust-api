@@ -192,16 +192,15 @@ pub fn call_mutable(gas_limit: u64, address: &Vec<u8>, value: &Vec<u8>, data: &V
     assert!(address.len() == 20);
     assert!(value.len() == 16);
 
-    let ret;
-    unsafe {
-        ret = ethereum_call(
+    let ret = unsafe {
+        ethereum_call(
             gas_limit,
             address.as_ptr() as *const u32,
             value.as_ptr() as *const u32,
             data.as_ptr() as *const u32,
             data.len() as u32
-        );
-    }
+        )
+    };
 
     match ret {
         0 => CallResult::Successful,
@@ -215,16 +214,15 @@ pub fn call_code(gas_limit: u64, address: &Vec<u8>, value: &Vec<u8>, data: &Vec<
     assert!(address.len() == 20);
     assert!(value.len() == 16);
 
-    let ret;
-    unsafe {
-        ret = ethereum_callCode(
+    let ret = unsafe {
+        ethereum_callCode(
             gas_limit,
             address.as_ptr() as *const u32,
             value.as_ptr() as *const u32,
             data.as_ptr() as *const u32,
             data.len() as u32
-        );
-    }
+        )
+    };
 
     match ret {
         0 => CallResult::Successful,
@@ -237,15 +235,14 @@ pub fn call_code(gas_limit: u64, address: &Vec<u8>, value: &Vec<u8>, data: &Vec<
 pub fn call_delegate(gas_limit: u64, address: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
 
-    let ret;
-    unsafe {
-        ret = ethereum_callDelegate(
+    let ret = unsafe {
+        ethereum_callDelegate(
             gas_limit,
             address.as_ptr() as *const u32,
             data.as_ptr() as *const u32,
             data.len() as u32
-        );
-    }
+        )
+    };
 
 
     match ret {
@@ -259,15 +256,14 @@ pub fn call_delegate(gas_limit: u64, address: &Vec<u8>, data: &Vec<u8>) -> CallR
 pub fn call_static(gas_limit: u64, address: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
 
-    let ret;
-    unsafe {
-        ret = ethereum_callStatic(
+    let ret = unsafe {
+        ethereum_callStatic(
             gas_limit,
             address.as_ptr() as *const u32,
             data.as_ptr() as *const u32,
             data.len() as u32
-        );
-    }
+        )
+    };
 
     match ret {
         0 => CallResult::Successful,
@@ -282,15 +278,14 @@ pub fn create(value: &Vec<u8>, data: &Vec<u8>) -> CreateResult {
 
     let mut result: Vec<u8> = alloc_address();
 
-    let ret;
-    unsafe {
-         ret = ethereum_create(
+    let ret = unsafe {
+         ethereum_create(
             value.as_ptr() as *const u32,
             data.as_ptr() as *const u32,
             data.len() as u32,
             result.as_mut_ptr() as *const u32
-        );
-    }
+        )
+    };
 
     match ret {
         0 => CreateResult::Successful(result),
