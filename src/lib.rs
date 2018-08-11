@@ -156,26 +156,38 @@ pub fn tx_origin() -> [u8;20] {
     return ret;
 }
 
-pub fn log(data: &[u8], topics: &Vec<[u8;32]>) {
-    let topics_count = topics.len();
-    assert!(topics_count <= 4);
-
-    let mut topic_ptrs = [0 as *const u8;4];
-    for i in 0..topics_count {
-        topic_ptrs[i] = topics[i].as_ptr()
-    }
-
+fn log(data: &[u8], topic_count: usize, topic1: *const u8, topic2: *const u8, topic3: *const u8, topic4: *const u8) {
     unsafe {
         ethereum_log(
             data.as_ptr() as *const u32,
             data.len() as u32,
-            topics_count as u32,
-            topic_ptrs[0] as *const u32,
-            topic_ptrs[1] as *const u32,
-            topic_ptrs[2] as *const u32,
-            topic_ptrs[3] as *const u32,
+            topic_count as u32,
+            topic1 as *const u32,
+            topic2 as *const u32,
+            topic3 as *const u32,
+            topic4 as *const u32,
         );
     }
+}
+
+pub fn log0(data: &[u8]) {
+    log(data, 0, 0 as *const u8, 0 as *const u8, 0 as *const u8, 0 as *const u8)
+}
+
+pub fn log1(data: &[u8], topic1: [u8;32]) {
+    log(data, 1, topic1.as_ptr() as *const u8, 0 as *const u8, 0 as *const u8, 0 as *const u8)
+}
+
+pub fn log2(data: &[u8], topic1: [u8;32], topic2: [u8;32]) {
+    log(data, 2, topic1.as_ptr() as *const u8, topic2.as_ptr() as *const u8, 0 as *const u8, 0 as *const u8)
+}
+
+pub fn log3(data: &[u8], topic1: [u8;32], topic2: [u8;32], topic3: [u8;32]) {
+    log(data, 3, topic1.as_ptr() as *const u8, topic2.as_ptr() as *const u8, topic3.as_ptr() as *const u8, 0 as *const u8)
+}
+
+pub fn log4(data: &[u8], topic1: [u8;32], topic2: [u8;32], topic3: [u8;32], topic4: [u8;32]) {
+    log(data, 4, topic1.as_ptr() as *const u8, topic2.as_ptr() as *const u8, topic3.as_ptr() as *const u8, topic4.as_ptr() as *const u8)
 }
 
 pub fn call_mutable(gas_limit: u64, address: &[u8;20], value: &[u8;16], data: &[u8]) -> CallResult {
