@@ -36,6 +36,26 @@ extern "C" {
     fn ethereum_selfDestruct(addressOffset: *const u32) -> !;
 }
 
+fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(len);
+    unsafe {
+        ret.set_len(len);
+    }
+    ret
+}
+
+fn alloc_address() -> Vec<u8> {
+   unsafe_alloc_buffer(20)
+}
+
+fn alloc_value() -> Vec<u8> {
+   unsafe_alloc_buffer(16)
+}
+
+fn alloc_hash() -> Vec<u8> {
+   unsafe_alloc_buffer(32)
+}
+
 pub enum CallResult {
     Successful,
     Failure,
@@ -61,11 +81,10 @@ pub fn gas_left() -> u64 {
 }
 
 pub fn current_address() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(20);
+    let mut ret: Vec<u8> = alloc_address();
 
     unsafe {
         ethereum_getAddress(ret.as_mut_ptr() as *const u32);
-        ret.set_len(20);
     }
 
     return ret;
@@ -74,22 +93,20 @@ pub fn current_address() -> Vec<u8> {
 pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
     assert!(address.len() == 20);
 
-    let mut ret: Vec<u8> = Vec::with_capacity(16);
+    let mut ret: Vec<u8> = alloc_value();
 
     unsafe {
         ethereum_getBalance(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
-        ret.set_len(16);
     }
 
     return ret;
 }
 
 pub fn block_coinbase() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(20);
+    let mut ret: Vec<u8> = alloc_address();
 
     unsafe {
         ethereum_getBlockCoinbase(ret.as_mut_ptr() as *const u32);
-        ret.set_len(20);
     }
 
     return ret;
@@ -113,11 +130,10 @@ pub fn block_gas_limit() -> u64 {
 }
 
 pub fn block_hash(number: u64) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(32);
+    let mut ret: Vec<u8> = alloc_hash();
 
     unsafe {
         ethereum_getBlockHash(number, ret.as_mut_ptr() as *const u32);
-        ret.set_len(32);
     }
 
     return ret;
@@ -136,22 +152,20 @@ pub fn block_timestamp() -> u64 {
 }
 
 pub fn tx_gas_price() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(16);
+    let mut ret: Vec<u8> = alloc_value();
 
     unsafe {
         ethereum_getTxGasPrice(ret.as_mut_ptr() as *const u32);
-        ret.set_len(16);
     }
 
     return ret;
 }
 
 pub fn tx_origin() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(20);
+    let mut ret: Vec<u8> = alloc_address();
 
     unsafe {
         ethereum_getTxOrigin(ret.as_mut_ptr() as *const u32);
-        ret.set_len(20);
     }
 
     return ret;
@@ -267,7 +281,7 @@ pub fn call_static(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResul
 pub fn create(value: Vec<u8>, data: Vec<u8>) -> CreateResult {
     assert!(value.len() == 16);
 
-    let mut result: Vec<u8> = Vec::with_capacity(20);
+    let mut result: Vec<u8> = alloc_address();
 
     let ret;
     unsafe {
@@ -277,7 +291,6 @@ pub fn create(value: Vec<u8>, data: Vec<u8>) -> CreateResult {
             data.len() as u32,
             result.as_mut_ptr() as *const u32
         );
-        result.set_len(20);
     }
 
     match ret {
@@ -290,11 +303,10 @@ pub fn create(value: Vec<u8>, data: Vec<u8>) -> CreateResult {
 
 #[warn(non_snake_case)]
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(length);
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
-        ret.set_len(length);
     }
 
     return ret;
@@ -307,33 +319,30 @@ pub fn calldata_size() -> usize {
 }
 
 pub fn caller() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(20);
+    let mut ret: Vec<u8> = alloc_address();
 
     unsafe {
         ethereum_getCaller(ret.as_mut_ptr() as *const u32);
-        ret.set_len(20);
     }
 
     return ret;
 }
 
 pub fn callvalue() -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(16);
+    let mut ret: Vec<u8> = alloc_value();
 
     unsafe {
         ethereum_getCallValue(ret.as_mut_ptr() as *const u32);
-        ret.set_len(16);
     }
 
     return ret;
 }
 
 pub fn code_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(length);
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_codeCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
-        ret.set_len(length);
     }
 
     return ret;
@@ -348,11 +357,10 @@ pub fn code_size() -> usize {
 pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u8> {
     assert!(address.len() == 20);
 
-    let mut ret: Vec<u8> = Vec::with_capacity(length);
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_externalCodeCopy(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32, from as u32, length as u32);
-        ret.set_len(length);
     }
 
     return ret;
@@ -367,11 +375,10 @@ pub fn external_code_size(address: Vec<u8>) -> usize {
 }
 
 pub fn returndata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(length);
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
-        ret.set_len(length);
     }
 
     return ret;
@@ -410,11 +417,10 @@ pub fn finish_data(data: Vec<u8>) -> ! {
 pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
     assert!(key.len() == 32);
 
-    let mut ret: Vec<u8> = Vec::with_capacity(32);
+    let mut ret: Vec<u8> = alloc_hash();
 
     unsafe {
         ethereum_storageLoad(key.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
-        ret.set_len(32);
     }
 
     return ret;
