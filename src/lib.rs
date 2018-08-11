@@ -11,6 +11,8 @@ extern "C" {
     fn ethereum_getCallDataSize() -> u32;
     fn ethereum_codeCopy(resultOffset: *const u32, codeOffset: u32, length: u32);
     fn ethereum_getCodeSize() -> u32;
+    fn ethereum_externalCodeCopy(addressOffset: *const u32, resultOffset: *const u32, codeOffset: u32, length: u32);
+    fn ethereum_getExternalCodeSize(addressOfset: *const u32) -> u32;
     fn ethereum_storageLoad(keyOffset: *const u32, resultOffset: *const u32);
     fn ethereum_storageStore(keyOffset: *const u32, valueOffset: *const u32);
     fn ethereum_selfDestruct(addressOffset: *const u32) -> !;
@@ -82,6 +84,23 @@ pub fn code_copy(from: usize, length: usize) -> Vec<u8> {
 pub fn code_size() -> usize {
     unsafe {
         return ethereum_getCodeSize() as usize;
+    }
+}
+
+pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(length);
+
+    unsafe {
+        ethereum_externalCodeCopy(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32, from as u32, length as u32);
+        ret.set_len(length);
+    }
+
+    return ret;
+}
+
+pub fn external_code_size(address: Vec<u8>) -> usize {
+    unsafe {
+        return ethereum_getExternalCodeSize(address.as_ptr() as *const u32) as usize;
     }
 }
 
