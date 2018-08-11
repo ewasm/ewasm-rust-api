@@ -217,6 +217,23 @@ pub fn external_code_size(address: Vec<u8>) -> usize {
     }
 }
 
+pub fn returndata_copy(from: usize, length: usize) -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(length);
+
+    unsafe {
+        ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
+        ret.set_len(length);
+    }
+
+    return ret;
+}
+
+pub fn returndata_size() -> usize {
+    unsafe {
+        return ethereum_getReturnDataSize() as usize;
+    }
+}
+
 pub fn revert() -> ! {
     unsafe {
         ethereum_revert(0 as *const u32, 0 as u32);
