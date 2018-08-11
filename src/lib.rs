@@ -636,3 +636,61 @@ pub fn selfdestruct(address: &Address) -> ! {
         native::ethereum_selfDestruct(address.bytes.as_ptr() as *const u32);
     }
 }
+
+pub trait EwasmAPI {
+    fn consume_gas(&self, amount: u64);
+    fn gas_left(&self) -> u64;
+    fn current_address(&self) -> Address;
+}
+
+#[derive(Debug)]
+pub struct NativeImpl;
+
+#[derive(Debug, Default)]
+pub struct TestImpl {
+    gas: u64,
+    address: Address,
+}
+
+/*
+trait TestSetter {
+   fn set_gas(mut self, amount: u64);
+}
+
+impl TestSetter for TestImpl {
+   fn set_gas(mut self, amount: u64) {
+       self.gas = amount
+   }
+}
+*/
+
+impl EwasmAPI for NativeImpl {
+    fn consume_gas(&self, amount: u64) {}
+    fn gas_left(&self) -> u64 {
+        gas_left()
+    }
+    fn current_address(&self) -> Address {
+        current_address()
+    }
+}
+
+impl EwasmAPI for TestImpl {
+    fn consume_gas(&self, amount: u64) {}
+    fn gas_left(&self) -> u64 {
+        self.gas
+    }
+    fn current_address(&self) -> Address {
+        self.address
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{EwasmAPI, TestImpl};
+
+    #[test]
+    fn consume_gas_func() {
+        assert_eq!(0, EwasmAPI::gas_left(&<TestImpl>::default()));
+        assert_eq!(TestImpl::default().gas_left(), 0);
+    }
+}
