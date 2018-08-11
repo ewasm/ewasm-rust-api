@@ -36,6 +36,12 @@ extern "C" {
     fn ethereum_selfDestruct(addressOffset: *const u32) -> !;
 }
 
+pub enum CallResult {
+    Successful,
+    Failure,
+    Revert
+}
+
 pub fn consume_gas(amount: u64) {
     unsafe {
         ethereum_useGas(amount);
@@ -160,6 +166,95 @@ pub fn log(data: Vec<u8>, topics: Vec<Vec<u8>>) {
             topics[2].as_ptr() as *const u32,
             topics[3].as_ptr() as *const u32
         );
+    }
+}
+
+pub fn call_mutable(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<u8>) -> CallResult {
+    assert!(address.len() == 20);
+    assert!(value.len() == 16);
+
+    let ret;
+    unsafe {
+        ret = ethereum_call(
+            gas_limit,
+            address.as_ptr() as *const u32,
+            value.as_ptr() as *const u32,
+            data.as_ptr() as *const u32,
+            data.len() as u32
+        );
+    }
+
+    match ret {
+        0 => CallResult::Successful,
+        1 => CallResult::Failure,
+        2 => CallResult::Revert,
+        _ => panic!()
+    }
+}
+
+pub fn call_code(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<u8>) -> CallResult {
+    assert!(address.len() == 20);
+    assert!(value.len() == 16);
+
+    let ret;
+    unsafe {
+        ret = ethereum_callCode(
+            gas_limit,
+            address.as_ptr() as *const u32,
+            value.as_ptr() as *const u32,
+            data.as_ptr() as *const u32,
+            data.len() as u32
+        );
+    }
+
+    match ret {
+        0 => CallResult::Successful,
+        1 => CallResult::Failure,
+        2 => CallResult::Revert,
+        _ => panic!()
+    }
+}
+
+pub fn call_delegate(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResult {
+    assert!(address.len() == 20);
+
+    let ret;
+    unsafe {
+        ret = ethereum_callDelegate(
+            gas_limit,
+            address.as_ptr() as *const u32,
+            data.as_ptr() as *const u32,
+            data.len() as u32
+        );
+    }
+
+
+    match ret {
+        0 => CallResult::Successful,
+        1 => CallResult::Failure,
+        2 => CallResult::Revert,
+        _ => panic!()
+    }
+}
+
+pub fn call_static(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResult {
+    assert!(address.len() == 20);
+
+    let ret;
+    unsafe {
+        ret = ethereum_callStatic(
+            gas_limit,
+            address.as_ptr() as *const u32,
+            data.as_ptr() as *const u32,
+            data.len() as u32
+        );
+    }
+
+    match ret {
+        0 => CallResult::Successful,
+        1 => CallResult::Failure,
+        2 => CallResult::Revert,
+        _ => panic!()
     }
 }
 
