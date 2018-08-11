@@ -7,7 +7,7 @@ extern "C" {
     fn ethereum_revert(dataOffset: *const u32, length: u32) -> !;
     fn ethereum_finish(dataOffset: *const u32, length: u32) -> !;
     fn ethereum_callDataCopy(resultOffset: *const u32, dataOffset: u32, length: u32);
-    fn ethereum_callDataSize() -> u32;
+    fn ethereum_getCallDataSize() -> u32;
     fn ethereum_storageLoad(keyOffset: *const u32, resultOffset: *const u32);
     fn ethereum_storageStore(keyOffset: *const u32, valueOffset: *const u32);
 }
@@ -54,7 +54,7 @@ pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
 
 pub fn calldata_size() -> usize {
     unsafe {
-        return ethereum_callDataSize() as usize;
+        return ethereum_getCallDataSize() as usize;
     }
 }
 
