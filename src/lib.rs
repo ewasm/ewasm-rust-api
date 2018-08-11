@@ -42,6 +42,12 @@ pub enum CallResult {
     Revert
 }
 
+pub enum CreateResult {
+    Successful(Vec<u8>),
+    Failure,
+    Revert
+}
+
 pub fn consume_gas(amount: u64) {
     unsafe {
         ethereum_useGas(amount);
@@ -254,6 +260,30 @@ pub fn call_static(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResul
         0 => CallResult::Successful,
         1 => CallResult::Failure,
         2 => CallResult::Revert,
+        _ => panic!()
+    }
+}
+
+pub fn create(value: Vec<u8>, data: Vec<u8>) -> CreateResult {
+    assert!(value.len() == 16);
+
+    let mut result: Vec<u8> = Vec::with_capacity(20);
+
+    let ret;
+    unsafe {
+         ret = ethereum_create(
+            value.as_ptr() as *const u32,
+            data.as_ptr() as *const u32,
+            data.len() as u32,
+            result.as_mut_ptr() as *const u32
+        );
+        result.set_len(20);
+    }
+
+    match ret {
+        0 => CreateResult::Successful(result),
+        1 => CreateResult::Failure,
+        2 => CreateResult::Revert,
         _ => panic!()
     }
 }
