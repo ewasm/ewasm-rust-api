@@ -60,6 +60,8 @@ pub fn current_address() -> Vec<u8> {
 }
 
 pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
+    assert!(address.len() == 20);
+
     let mut ret: Vec<u8> = Vec::with_capacity(16);
 
     unsafe {
@@ -219,6 +221,8 @@ pub fn code_size() -> usize {
 }
 
 pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u8> {
+    assert!(address.len() == 20);
+
     let mut ret: Vec<u8> = Vec::with_capacity(length);
 
     unsafe {
@@ -230,6 +234,8 @@ pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u
 }
 
 pub fn external_code_size(address: Vec<u8>) -> usize {
+    assert!(address.len() == 20);
+
     unsafe {
         return ethereum_getExternalCodeSize(address.as_ptr() as *const u32) as usize;
     }
@@ -277,6 +283,8 @@ pub fn finish_data(data: Vec<u8>) -> ! {
 }
 
 pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
+    assert!(key.len() == 32);
+
     let mut ret: Vec<u8> = Vec::with_capacity(32);
 
     unsafe {
@@ -288,12 +296,17 @@ pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
 }
 
 pub fn storage_store(key: Vec<u8>, value: Vec<u8>) {
+    assert!(key.len() == 32);
+    assert!(value.len() == 32);
+
     unsafe {
         ethereum_storageStore(key.as_ptr() as *const u32, value.as_ptr() as *const u32);
     }
 }
 
 pub fn selfdestruct(address: Vec<u8>) -> ! {
+    assert!(address.len() == 20);
+
     unsafe {
         ethereum_selfDestruct(address.as_ptr() as *const u32);
     }
