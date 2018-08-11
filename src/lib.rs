@@ -1,7 +1,11 @@
 use std::vec::Vec;
 
+#[cfg(test)]
+fn ethereum_getGasLeft() -> u64 { return 0 as u64 }
+
 extern "C" {
     fn ethereum_useGas(amount: u64);
+    #[cfg(not(test))]
     fn ethereum_getGasLeft() -> u64;
     fn ethereum_getAddress(resultOffset: *const u32);
     fn ethereum_getBalance(addressOffset: *const u32, resultOffset: *const u32);
@@ -400,5 +404,13 @@ pub fn storage_store(key: &[u8;32], value: &[u8;32]) {
 pub fn selfdestruct(address: &[u8; 20]) -> ! {
     unsafe {
         ethereum_selfDestruct(address.as_ptr() as *const u32);
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn modexp_func() {
+        assert_eq!(::gas_left(), 0);
     }
 }
