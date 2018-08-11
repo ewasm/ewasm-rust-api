@@ -90,7 +90,7 @@ pub fn current_address() -> Vec<u8> {
     return ret;
 }
 
-pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
+pub fn external_balance(address: &Vec<u8>) -> Vec<u8> {
     assert!(address.len() == 20);
 
     let mut ret: Vec<u8> = alloc_value();
@@ -171,7 +171,7 @@ pub fn tx_origin() -> Vec<u8> {
     return ret;
 }
 
-pub fn log(data: Vec<u8>, topics: Vec<Vec<u8>>) {
+pub fn log(data: &Vec<u8>, topics: &Vec<Vec<u8>>) {
     assert!(topics.len() <= 4);
     for i in 0..topics.len() {
         assert!(topics[i].len() == 32);
@@ -189,7 +189,7 @@ pub fn log(data: Vec<u8>, topics: Vec<Vec<u8>>) {
     }
 }
 
-pub fn call_mutable(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<u8>) -> CallResult {
+pub fn call_mutable(gas_limit: u64, address: &Vec<u8>, value: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
     assert!(value.len() == 16);
 
@@ -212,7 +212,7 @@ pub fn call_mutable(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<
     }
 }
 
-pub fn call_code(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<u8>) -> CallResult {
+pub fn call_code(gas_limit: u64, address: &Vec<u8>, value: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
     assert!(value.len() == 16);
 
@@ -235,7 +235,7 @@ pub fn call_code(gas_limit: u64, address: Vec<u8>, value: Vec<u8>, data: Vec<u8>
     }
 }
 
-pub fn call_delegate(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResult {
+pub fn call_delegate(gas_limit: u64, address: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
 
     let ret;
@@ -257,7 +257,7 @@ pub fn call_delegate(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallRes
     }
 }
 
-pub fn call_static(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResult {
+pub fn call_static(gas_limit: u64, address: &Vec<u8>, data: &Vec<u8>) -> CallResult {
     assert!(address.len() == 20);
 
     let ret;
@@ -278,7 +278,7 @@ pub fn call_static(gas_limit: u64, address: Vec<u8>, data: Vec<u8>) -> CallResul
     }
 }
 
-pub fn create(value: Vec<u8>, data: Vec<u8>) -> CreateResult {
+pub fn create(value: &Vec<u8>, data: &Vec<u8>) -> CreateResult {
     assert!(value.len() == 16);
 
     let mut result: Vec<u8> = alloc_address();
@@ -354,7 +354,7 @@ pub fn code_size() -> usize {
     }
 }
 
-pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u8> {
+pub fn external_code_copy(address: &Vec<u8>, from: usize, length: usize) -> Vec<u8> {
     assert!(address.len() == 20);
 
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
@@ -366,7 +366,7 @@ pub fn external_code_copy(address: Vec<u8>, from: usize, length: usize) -> Vec<u
     return ret;
 }
 
-pub fn external_code_size(address: Vec<u8>) -> usize {
+pub fn external_code_size(address: &Vec<u8>) -> usize {
     assert!(address.len() == 20);
 
     unsafe {
@@ -396,7 +396,7 @@ pub fn revert() -> ! {
     }
 }
 
-pub fn revert_data(data: Vec<u8>) -> ! {
+pub fn revert_data(data: &Vec<u8>) -> ! {
     unsafe {
         ethereum_revert(data.as_ptr() as *const u32, data.len() as u32);
     }
@@ -408,13 +408,13 @@ pub fn finish() -> ! {
     }
 }
 
-pub fn finish_data(data: Vec<u8>) -> ! {
+pub fn finish_data(data: &Vec<u8>) -> ! {
     unsafe {
         ethereum_finish(data.as_ptr() as *const u32, data.len() as u32);
     }
 }
 
-pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
+pub fn storage_load(key: &Vec<u8>) -> Vec<u8> {
     assert!(key.len() == 32);
 
     let mut ret: Vec<u8> = alloc_hash();
@@ -426,7 +426,7 @@ pub fn storage_load(key: Vec<u8>) -> Vec<u8> {
     return ret;
 }
 
-pub fn storage_store(key: Vec<u8>, value: Vec<u8>) {
+pub fn storage_store(key: &Vec<u8>, value: &Vec<u8>) {
     assert!(key.len() == 32);
     assert!(value.len() == 32);
 
@@ -435,7 +435,7 @@ pub fn storage_store(key: Vec<u8>, value: Vec<u8>) {
     }
 }
 
-pub fn selfdestruct(address: Vec<u8>) -> ! {
+pub fn selfdestruct(address: &Vec<u8>) -> ! {
     assert!(address.len() == 20);
 
     unsafe {
