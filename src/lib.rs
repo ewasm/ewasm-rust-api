@@ -70,6 +70,79 @@ pub fn external_balance(address: Vec<u8>) -> Vec<u8> {
     return ret;
 }
 
+pub fn block_coinbase() -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(20);
+
+    unsafe {
+        ethereum_getBlockCoinbase(ret.as_mut_ptr() as *const u32);
+        ret.set_len(20);
+    }
+
+    return ret;
+}
+
+pub fn block_difficulty() -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(32);
+
+    unsafe {
+        ethereum_getBlockDifficulty(ret.as_mut_ptr() as *const u32);
+        ret.set_len(32);
+    }
+
+    return ret;
+}
+
+pub fn block_gas_limit() -> u64 {
+    unsafe {
+        return ethereum_getBlockGasLimit();
+    }
+}
+
+pub fn block_hash(number: u64) -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(32);
+
+    unsafe {
+        ethereum_getBlockHash(number, ret.as_mut_ptr() as *const u32);
+        ret.set_len(32);
+    }
+
+    return ret;
+}
+
+pub fn block_number() -> u64 {
+    unsafe {
+        return ethereum_getBlockNumber();
+    }
+}
+
+pub fn block_timestamp() -> u64 {
+    unsafe {
+        return ethereum_getBlockTimestamp();
+    }
+}
+
+pub fn tx_gas_price() -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(16);
+
+    unsafe {
+        ethereum_getTxGasPrice(ret.as_mut_ptr() as *const u32);
+        ret.set_len(16);
+    }
+
+    return ret;
+}
+
+pub fn tx_origin() -> Vec<u8> {
+    let mut ret: Vec<u8> = Vec::with_capacity(20);
+
+    unsafe {
+        ethereum_getTxOrigin(ret.as_mut_ptr() as *const u32);
+        ret.set_len(20);
+    }
+
+    return ret;
+}
+
 #[warn(non_snake_case)]
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = Vec::with_capacity(length);
