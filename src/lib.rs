@@ -171,19 +171,24 @@ pub fn tx_origin() -> Vec<u8> {
 }
 
 pub fn log(data: &Vec<u8>, topics: &Vec<Vec<u8>>) {
-    assert!(topics.len() <= 4);
-    for i in 0..topics.len() {
+    let topics_count = topics.len();
+    assert!(topics_count <= 4);
+
+    let mut topic_ptrs = [0 as *const u8;4];
+    for i in 0..topics_count {
         assert!(topics[i].len() == 32);
+        topic_ptrs[i] = topics[i].as_ptr()
     }
+
     unsafe {
         ethereum_log(
             data.as_ptr() as *const u32,
             data.len() as u32,
-            topics.len() as u32,
-            topics[0].as_ptr() as *const u32,
-            topics[1].as_ptr() as *const u32,
-            topics[2].as_ptr() as *const u32,
-            topics[3].as_ptr() as *const u32
+            topics_count as u32,
+            topic_ptrs[0] as *const u32,
+            topic_ptrs[1] as *const u32,
+            topic_ptrs[2] as *const u32,
+            topic_ptrs[3] as *const u32,
         );
     }
 }
