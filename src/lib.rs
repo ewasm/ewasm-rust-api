@@ -301,7 +301,6 @@ pub fn create(value: &Vec<u8>, data: &Vec<u8>) -> CreateResult {
     }
 }
 
-#[warn(non_snake_case)]
 pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
