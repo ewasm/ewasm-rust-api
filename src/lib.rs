@@ -64,7 +64,7 @@ pub fn consume_gas(amount: u64) {
 
 pub fn gas_left() -> u64 {
     unsafe {
-        return ethereum_getGasLeft();
+        ethereum_getGasLeft()
     }
 }
 
@@ -74,8 +74,7 @@ pub fn current_address() -> [u8;20] {
     unsafe {
         ethereum_getAddress(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn external_balance(address: &[u8;20]) -> [u8;16] {
@@ -84,8 +83,7 @@ pub fn external_balance(address: &[u8;20]) -> [u8;16] {
     unsafe {
         ethereum_getBalance(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn block_coinbase() -> [u8;20] {
@@ -94,8 +92,7 @@ pub fn block_coinbase() -> [u8;20] {
     unsafe {
         ethereum_getBlockCoinbase(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn block_difficulty() -> [u8;32] {
@@ -104,13 +101,12 @@ pub fn block_difficulty() -> [u8;32] {
     unsafe {
         ethereum_getBlockDifficulty(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn block_gas_limit() -> u64 {
     unsafe {
-        return ethereum_getBlockGasLimit();
+        ethereum_getBlockGasLimit()
     }
 }
 
@@ -120,19 +116,18 @@ pub fn block_hash(number: u64) -> [u8;32] {
     unsafe {
         ethereum_getBlockHash(number, ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn block_number() -> u64 {
     unsafe {
-        return ethereum_getBlockNumber();
+        ethereum_getBlockNumber()
     }
 }
 
 pub fn block_timestamp() -> u64 {
     unsafe {
-        return ethereum_getBlockTimestamp();
+        ethereum_getBlockTimestamp()
     }
 }
 
@@ -142,8 +137,7 @@ pub fn tx_gas_price() -> [u8;16] {
     unsafe {
         ethereum_getTxGasPrice(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn tx_origin() -> [u8;20] {
@@ -152,8 +146,7 @@ pub fn tx_origin() -> [u8;20] {
     unsafe {
         ethereum_getTxOrigin(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn log(data: &[u8], topics: &Vec<[u8;32]>) {
@@ -279,8 +272,7 @@ pub fn calldata_copy(from: usize, length: usize) -> Vec<u8> {
     unsafe {
         ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn calldata_size() -> usize {
@@ -295,8 +287,7 @@ pub fn caller() -> [u8;20] {
     unsafe {
         ethereum_getCaller(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn callvalue() -> [u8;16] {
@@ -305,8 +296,7 @@ pub fn callvalue() -> [u8;16] {
     unsafe {
         ethereum_getCallValue(ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn code_copy(from: usize, length: usize) -> Vec<u8> {
@@ -315,13 +305,12 @@ pub fn code_copy(from: usize, length: usize) -> Vec<u8> {
     unsafe {
         ethereum_codeCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn code_size() -> usize {
     unsafe {
-        return ethereum_getCodeSize() as usize;
+        ethereum_getCodeSize() as usize
     }
 }
 
@@ -331,13 +320,12 @@ pub fn external_code_copy(address: &[u8;20], from: usize, length: usize) -> Vec<
     unsafe {
         ethereum_externalCodeCopy(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn external_code_size(address: &[u8;20]) -> usize {
     unsafe {
-        return ethereum_getExternalCodeSize(address.as_ptr() as *const u32) as usize;
+        ethereum_getExternalCodeSize(address.as_ptr() as *const u32) as usize
     }
 }
 
@@ -347,13 +335,12 @@ pub fn returndata_copy(from: usize, length: usize) -> Vec<u8> {
     unsafe {
         ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn returndata_size() -> usize {
     unsafe {
-        return ethereum_getReturnDataSize() as usize;
+        ethereum_getReturnDataSize() as usize
     }
 }
 
@@ -387,8 +374,7 @@ pub fn storage_load(key: &[u8;32]) -> [u8;32] {
     unsafe {
         ethereum_storageLoad(key.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32);
     }
-
-    return ret;
+    ret
 }
 
 pub fn storage_store(key: &[u8;32], value: &[u8;32]) {
