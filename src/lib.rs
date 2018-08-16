@@ -282,19 +282,23 @@ pub fn create(value: &[u8;16], data: &[u8]) -> CreateResult {
     }
 }
 
-pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
-    let size = calldata_size();
-
-    if (size < from) || ((size - from) < length) {
-        return Err(Error::OutOfBoundsCopy)
-    }
-
+pub fn unsafe_calldata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-    Ok(ret)
+    ret
+}
+
+pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+    let size = calldata_size();
+
+    if (size < from) || ((size - from) < length) {
+        Err(Error::OutOfBoundsCopy)
+    } else {
+        Ok(unsafe_calldata_copy(from, length))
+    }
 }
 
 pub fn calldata_size() -> usize {
@@ -321,19 +325,23 @@ pub fn callvalue() -> [u8;16] {
     ret
 }
 
-pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
-    let size = code_size();
-
-    if (size < from) || ((size - from) < length) {
-        return Err(Error::OutOfBoundsCopy)
-    }
-
+pub fn unsafe_code_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_codeCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-    Ok(ret)
+    ret
+}
+
+pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+    let size = code_size();
+
+    if (size < from) || ((size - from) < length) {
+        Err(Error::OutOfBoundsCopy)
+    } else {
+        Ok(unsafe_code_copy(from, length))
+    }
 }
 
 pub fn code_size() -> usize {
@@ -343,20 +351,24 @@ pub fn code_size() -> usize {
 }
 
 
-pub fn external_code_copy(address: &[u8;20], from: usize, length: usize) -> Result<Vec<u8>, Error> {
-    let size = external_code_size(address);
-
-    if (size < from) || ((size - from) < length) {
-        return Err(Error::OutOfBoundsCopy)
-    }
-
+pub fn unsafe_external_code_copy(address: &[u8;20], from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_externalCodeCopy(address.as_ptr() as *const u32, ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
 
-    Ok(ret)
+    ret
+}
+
+pub fn external_code_copy(address: &[u8;20], from: usize, length: usize) -> Result<Vec<u8>, Error> {
+    let size = external_code_size(address);
+
+    if (size < from) || ((size - from) < length) {
+        Err(Error::OutOfBoundsCopy)
+    } else {
+        Ok(unsafe_external_code_copy(address, from, length))
+    }
 }
 
 pub fn external_code_size(address: &[u8;20]) -> usize {
@@ -365,20 +377,24 @@ pub fn external_code_size(address: &[u8;20]) -> usize {
     }
 }
 
-pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
-    let size = returndata_size();
-
-    if (size < from) || ((size - from) < length) {
-        return Err(Error::OutOfBoundsCopy)
-    }
-
+pub fn unsafe_returndata_copy(from: usize, length: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
 
     unsafe {
         ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
 
-    Ok(ret)
+    ret
+}
+
+pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+    let size = returndata_size();
+
+    if (size < from) || ((size - from) < length) {
+        Err(Error::OutOfBoundsCopy)
+    } else {
+        Ok(unsafe_returndata_copy(from, length))
+    }
 }
 
 pub fn returndata_size() -> usize {
