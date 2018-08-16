@@ -10,7 +10,14 @@ jobs:
           name: Update rustc
           command: |
             rustup target add wasm32-unknown-unknown
+            rustup component add rustfmt-preview
             rustup update
+      - run:
+           name: Check formatting
+           command: |
+             rustfmt --version
+             cargo fmt
+             git diff --exit-code
       - run:
           name: Build
           command: cargo build --release --target wasm32-unknown-unknown
