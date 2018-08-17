@@ -374,6 +374,10 @@ pub fn unsafe_calldata_copy(from: usize, length: usize) -> Vec<u8> {
     ret
 }
 
+pub fn calldata_acquire() -> Vec<u8> {
+    unsafe_calldata_copy(0, calldata_size())
+}
+
 pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
     let size = calldata_size();
 
@@ -385,9 +389,7 @@ pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
 }
 
 pub fn calldata_size() -> usize {
-    unsafe {
-        return native::ethereum_getCallDataSize() as usize;
-    }
+    unsafe { native::ethereum_getCallDataSize() as usize }
 }
 
 pub fn caller() -> [u8; 20] {
@@ -417,6 +419,10 @@ pub fn unsafe_code_copy(from: usize, length: usize) -> Vec<u8> {
     ret
 }
 
+pub fn code_acquire() -> Vec<u8> {
+    unsafe_code_copy(0, code_size())
+}
+
 pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
     let size = code_size();
 
@@ -442,8 +448,11 @@ pub fn unsafe_external_code_copy(address: &[u8; 20], from: usize, length: usize)
             length as u32,
         );
     }
-
     ret
+}
+
+pub fn external_code_acquire(address: &[u8; 20]) -> Vec<u8> {
+    unsafe_external_code_copy(address, 0, external_code_size(address))
 }
 
 pub fn external_code_copy(
@@ -470,8 +479,11 @@ pub fn unsafe_returndata_copy(from: usize, length: usize) -> Vec<u8> {
     unsafe {
         native::ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
     ret
+}
+
+pub fn returndata_acquire() -> Vec<u8> {
+    unsafe_returndata_copy(0, returndata_size())
 }
 
 pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
