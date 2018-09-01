@@ -86,7 +86,7 @@ fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
     ret
 }
 
-pub enum Error {
+pub enum EeiError {
     OutOfBoundsCopy,
 }
 
@@ -378,11 +378,11 @@ pub fn calldata_acquire() -> Vec<u8> {
     unsafe_calldata_copy(0, calldata_size())
 }
 
-pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, EeiError> {
     let size = calldata_size();
 
     if (size < from) || ((size - from) < length) {
-        Err(Error::OutOfBoundsCopy)
+        Err(EeiError::OutOfBoundsCopy)
     } else {
         Ok(unsafe_calldata_copy(from, length))
     }
@@ -423,11 +423,11 @@ pub fn code_acquire() -> Vec<u8> {
     unsafe_code_copy(0, code_size())
 }
 
-pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, EeiError> {
     let size = code_size();
 
     if (size < from) || ((size - from) < length) {
-        Err(Error::OutOfBoundsCopy)
+        Err(EeiError::OutOfBoundsCopy)
     } else {
         Ok(unsafe_code_copy(from, length))
     }
@@ -459,11 +459,11 @@ pub fn external_code_copy(
     address: &[u8; 20],
     from: usize,
     length: usize,
-) -> Result<Vec<u8>, Error> {
+) -> Result<Vec<u8>, EeiError> {
     let size = external_code_size(address);
 
     if (size < from) || ((size - from) < length) {
-        Err(Error::OutOfBoundsCopy)
+        Err(EeiError::OutOfBoundsCopy)
     } else {
         Ok(unsafe_external_code_copy(address, from, length))
     }
@@ -486,11 +486,11 @@ pub fn returndata_acquire() -> Vec<u8> {
     unsafe_returndata_copy(0, returndata_size())
 }
 
-pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, EeiError> {
     let size = returndata_size();
 
     if (size < from) || ((size - from) < length) {
-        Err(Error::OutOfBoundsCopy)
+        Err(EeiError::OutOfBoundsCopy)
     } else {
         Ok(unsafe_returndata_copy(from, length))
     }
