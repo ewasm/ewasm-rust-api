@@ -1,3 +1,23 @@
+/// ewasm_api is a library used to interface with Ethereum's EEI in Ewasm, a set of enhancements to
+/// the Ethereum smart contract platform.
+/// ewasm_api exposes both a set of unsafe "native" functions representing the actual EEI
+/// functions, and a set of safe wrappers around them. It is recommended not to use the native
+/// functions as they do not perform bounds-checking.
+///
+/// To use ewasm_api, simply include it as a dependency in your project.
+///
+/// # Examples
+/// ```
+/// extern crate ewasm_api;
+///
+/// use ewasm_api::{block_hash, finish};
+///
+/// #[no_mangle]
+/// pub extern "C" fn main() {
+///     let a: [u8; 32] = block_hash(1);
+///     finish(&a);
+/// }
+/// ```
 use std::vec::Vec;
 
 /// The native host interface exposed to the ewasm contract. Do not use these functions unless, for
