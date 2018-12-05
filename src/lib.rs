@@ -527,29 +527,30 @@ pub fn callvalue() -> EtherValue {
 }
 
 /// Executes codeCopy, but does not check for overflow.
-pub fn unsafe_code_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_code_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_codeCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    ret
 }
 
 /// Returns the currently executing code.
 pub fn code_acquire() -> Vec<u8> {
-    unsafe_code_copy(0, code_size())
+    let length = code_size();
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_code_copy(0, length, &mut ret);
+    ret
 }
 
 /// Copies the segment of running code beginning at `from` and continuing for `length` bytes.
-pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn code_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(), Error> {
     let size = code_size();
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_code_copy(from, length))
+        unsafe_code_copy(from, length, ret);
+        Ok(())
     }
 }
 
