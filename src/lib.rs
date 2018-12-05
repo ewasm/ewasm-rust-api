@@ -132,12 +132,25 @@ pub struct Bytes32 {
     pub bytes: [u8; 32],
 }
 
+/// Type representing a value in wei.
 pub type EtherValue = Uint128;
+
+/// Type representing an address.
 pub type Address = Bytes20;
+
+/// Type representing a storage key.
 pub type StorageKey = Bytes32;
+
+/// Type representing a storage value.
 pub type StorageValue = Bytes32;
+
+/// Type representing a log topic.
 pub type Topic = Bytes32;
+
+/// Type representing a Keccak-256 or SHA-256 hash.
 pub type Hash = Bytes32;
+
+/// Type representing a block's difficulty.
 pub type Difficulty = Uint256;
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
