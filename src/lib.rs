@@ -132,13 +132,13 @@ pub struct Bytes32 {
     pub bytes: [u8; 32],
 }
 
-type EtherValue = Uint128;
-type Address = Bytes20;
-type StorageKey = Bytes32;
-type StorageValue = Bytes32;
-type Topic = Bytes32;
-type Hash = Bytes32;
-type Difficulty = Uint256;
+pub type EtherValue = Uint128;
+pub type Address = Bytes20;
+pub type StorageKey = Bytes32;
+pub type StorageValue = Bytes32;
+pub type Topic = Bytes32;
+pub type Hash = Bytes32;
+pub type Difficulty = Uint256;
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
 /// `externalCodeCopy`, and `returnDataCopy`.
