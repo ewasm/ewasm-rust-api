@@ -472,29 +472,30 @@ pub fn create(value: &EtherValue, data: &[u8]) -> CreateResult {
 }
 
 /// Executes callDataCopy, but does not check for overflow.
-pub fn unsafe_calldata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_calldata_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    ret
 }
 
 /// Returns a vector containing all data passed with the currently executing call.
 pub fn calldata_acquire() -> Vec<u8> {
-    unsafe_calldata_copy(0, calldata_size())
+    let length = calldata_size();
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_calldata_copy(0, length, &mut ret);
+    ret
 }
 
 /// Returns the segment of call data beginning at `from`, and continuing for `length` bytes.
-pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn calldata_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(), Error> {
     let size = calldata_size();
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_calldata_copy(from, length))
+        unsafe_calldata_copy(from, length, ret);
+        Ok(())
     }
 }
 
