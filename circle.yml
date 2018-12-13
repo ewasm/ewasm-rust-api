@@ -19,5 +19,8 @@ jobs:
              cargo fmt
              git diff --exit-code
       - run:
+          name: Test
+          command: cargo test
+      - run:
           name: Build
           command: cargo build --release --target wasm32-unknown-unknown
