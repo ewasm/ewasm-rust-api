@@ -560,9 +560,7 @@ pub fn code_size() -> usize {
 }
 
 /// Executes externalCodeCopy, but does not check for overflow.
-pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_externalCodeCopy(
             address.bytes.as_ptr() as *const u32,
@@ -571,23 +569,31 @@ pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize) 
             length as u32,
         );
     }
-
-    ret
 }
 
 /// Returns the code at the specified address.
 pub fn external_code_acquire(address: &Address) -> Vec<u8> {
-    unsafe_external_code_copy(address, 0, external_code_size(address))
+    let length = external_code_size(address);
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_external_code_copy(address, 0, length, &mut ret);
+    ret
 }
 
 /// Returns the segment of code at `address` beginning at `from` and continuing for `length` bytes.
-pub fn external_code_copy(address: &Address, from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn external_code_copy(
+    address: &Address,
+    from: usize,
+    length: usize,
+    ret: &mut [u8],
+) -> Result<(), Error> {
     let size = external_code_size(address);
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_external_code_copy(address, from, length))
+        unsafe_external_code_copy(address, from, length, ret);
+        Ok(())
     }
 }
 
