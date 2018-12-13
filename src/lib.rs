@@ -7,10 +7,10 @@
 /// To use ewasm_api, simply include it as a dependency in your project.
 ///
 /// # Examples
-/// ```
+/// ```ignore
 /// extern crate ewasm_api;
 ///
-/// use ewasm_api::{block_hash, finish_data};
+/// use ewasm_api::{Hash, block_hash, finish_data};
 ///
 /// #[no_mangle]
 /// pub extern "C" fn main() {
