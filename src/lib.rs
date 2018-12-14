@@ -27,7 +27,7 @@ mod native {
         pub fn ethereum_useGas(amount: u64);
         pub fn ethereum_getGasLeft() -> u64;
         pub fn ethereum_getAddress(resultOffset: *const u32);
-        pub fn ethereum_getBalance(addressOffset: *const u32, resultOffset: *const u32);
+        pub fn ethereum_getExternalBalance(addressOffset: *const u32, resultOffset: *const u32);
         pub fn ethereum_getBlockCoinbase(resultOffset: *const u32);
         pub fn ethereum_getBlockDifficulty(resultOffset: *const u32);
         pub fn ethereum_getBlockGasLimit() -> u64;
@@ -204,7 +204,7 @@ pub fn external_balance(address: &Address) -> EtherValue {
     let mut ret = EtherValue::default();
 
     unsafe {
-        native::ethereum_getBalance(
+        native::ethereum_getExternalBalance(
             address.bytes.as_ptr() as *const u32,
             ret.bytes.as_mut_ptr() as *const u32,
         );
