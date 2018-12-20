@@ -472,29 +472,30 @@ pub fn create(value: &EtherValue, data: &[u8]) -> CreateResult {
 }
 
 /// Executes callDataCopy, but does not check for overflow.
-pub fn unsafe_calldata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_calldata_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_callDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    ret
 }
 
 /// Returns a vector containing all data passed with the currently executing call.
 pub fn calldata_acquire() -> Vec<u8> {
-    unsafe_calldata_copy(0, calldata_size())
+    let length = calldata_size();
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_calldata_copy(0, length, &mut ret);
+    ret
 }
 
 /// Returns the segment of call data beginning at `from`, and continuing for `length` bytes.
-pub fn calldata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn calldata_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(), Error> {
     let size = calldata_size();
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_calldata_copy(from, length))
+        unsafe_calldata_copy(from, length, ret);
+        Ok(())
     }
 }
 
@@ -526,29 +527,30 @@ pub fn callvalue() -> EtherValue {
 }
 
 /// Executes codeCopy, but does not check for overflow.
-pub fn unsafe_code_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_code_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_codeCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    ret
 }
 
 /// Returns the currently executing code.
 pub fn code_acquire() -> Vec<u8> {
-    unsafe_code_copy(0, code_size())
+    let length = code_size();
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_code_copy(0, length, &mut ret);
+    ret
 }
 
 /// Copies the segment of running code beginning at `from` and continuing for `length` bytes.
-pub fn code_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn code_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(), Error> {
     let size = code_size();
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_code_copy(from, length))
+        unsafe_code_copy(from, length, ret);
+        Ok(())
     }
 }
 
@@ -558,9 +560,7 @@ pub fn code_size() -> usize {
 }
 
 /// Executes externalCodeCopy, but does not check for overflow.
-pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_externalCodeCopy(
             address.bytes.as_ptr() as *const u32,
@@ -569,23 +569,31 @@ pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize) 
             length as u32,
         );
     }
-
-    ret
 }
 
 /// Returns the code at the specified address.
 pub fn external_code_acquire(address: &Address) -> Vec<u8> {
-    unsafe_external_code_copy(address, 0, external_code_size(address))
+    let length = external_code_size(address);
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_external_code_copy(address, 0, length, &mut ret);
+    ret
 }
 
 /// Returns the segment of code at `address` beginning at `from` and continuing for `length` bytes.
-pub fn external_code_copy(address: &Address, from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn external_code_copy(
+    address: &Address,
+    from: usize,
+    length: usize,
+    ret: &mut [u8],
+) -> Result<(), Error> {
     let size = external_code_size(address);
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_external_code_copy(address, from, length))
+        unsafe_external_code_copy(address, from, length, ret);
+        Ok(())
     }
 }
 
@@ -595,29 +603,30 @@ pub fn external_code_size(address: &Address) -> usize {
 }
 
 /// Executes returnDataCopy, but does not check for overflow.
-pub fn unsafe_returndata_copy(from: usize, length: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
-
+pub fn unsafe_returndata_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
         native::ethereum_returnDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
-
-    ret
 }
 
 /// Returns the data in the VM's return buffer.
 pub fn returndata_acquire() -> Vec<u8> {
-    unsafe_returndata_copy(0, returndata_size())
+    let length = returndata_size();
+
+    let mut ret: Vec<u8> = unsafe_alloc_buffer(length);
+    unsafe_returndata_copy(0, length, &mut ret);
+    ret
 }
 
 /// Returns the segment of return buffer data beginning at `from` and continuing for `length` bytes.
-pub fn returndata_copy(from: usize, length: usize) -> Result<Vec<u8>, Error> {
+pub fn returndata_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(), Error> {
     let size = returndata_size();
 
-    if (size < from) || ((size - from) < length) {
+    if (size < from) || ((size - from) < length) || (ret.len() < length) {
         Err(Error::OutOfBoundsCopy)
     } else {
-        Ok(unsafe_returndata_copy(from, length))
+        unsafe_returndata_copy(from, length, ret);
+        Ok(())
     }
 }
 
