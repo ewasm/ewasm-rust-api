@@ -18,6 +18,8 @@
 ///     finish_data(&a.bytes);
 /// }
 /// ```
+
+#[cfg(feature = "std")]
 use std::vec::Vec;
 
 /// The native host interface exposed to the ewasm contract. Do not use these functions unless, for
@@ -100,6 +102,7 @@ mod native {
     }
 }
 
+#[cfg(feature = "std")]
 fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
     let mut ret: Vec<u8> = Vec::with_capacity(len);
     unsafe {
@@ -478,6 +481,7 @@ pub fn unsafe_calldata_copy(from: usize, length: usize, ret: &mut [u8]) {
     }
 }
 
+#[cfg(feature = "std")]
 /// Returns a vector containing all data passed with the currently executing call.
 pub fn calldata_acquire() -> Vec<u8> {
     let length = calldata_size();
@@ -533,6 +537,7 @@ pub fn unsafe_code_copy(from: usize, length: usize, ret: &mut [u8]) {
     }
 }
 
+#[cfg(feature = "std")]
 /// Returns the currently executing code.
 pub fn code_acquire() -> Vec<u8> {
     let length = code_size();
@@ -571,6 +576,7 @@ pub fn unsafe_external_code_copy(address: &Address, from: usize, length: usize, 
     }
 }
 
+#[cfg(feature = "std")]
 /// Returns the code at the specified address.
 pub fn external_code_acquire(address: &Address) -> Vec<u8> {
     let length = external_code_size(address);
@@ -609,6 +615,7 @@ pub fn unsafe_returndata_copy(from: usize, length: usize, ret: &mut [u8]) {
     }
 }
 
+#[cfg(feature = "std")]
 /// Returns the data in the VM's return buffer.
 pub fn returndata_acquire() -> Vec<u8> {
     let length = returndata_size();
