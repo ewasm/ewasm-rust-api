@@ -168,6 +168,7 @@ pub enum CallResult {
     Successful,
     Failure,
     Revert,
+    Unknown,
 }
 
 /// Enum describing the result of `create`. On success, the data contained is the address of the
@@ -176,6 +177,7 @@ pub enum CreateResult {
     Successful(Address),
     Failure,
     Revert,
+    Unknown,
 }
 
 /// Subtracts the given amount from the VM's gas counter. This is usually injected by the metering
@@ -390,7 +392,7 @@ pub fn call_mutable(
         0 => CallResult::Successful,
         1 => CallResult::Failure,
         2 => CallResult::Revert,
-        _ => panic!(),
+        _ => CallResult::Unknown,
     }
 }
 
@@ -410,7 +412,7 @@ pub fn call_code(gas_limit: u64, address: &Address, value: &EtherValue, data: &[
         0 => CallResult::Successful,
         1 => CallResult::Failure,
         2 => CallResult::Revert,
-        _ => panic!(),
+        _ => CallResult::Unknown,
     }
 }
 
@@ -430,7 +432,7 @@ pub fn call_delegate(gas_limit: u64, address: &Address, data: &[u8]) -> CallResu
         0 => CallResult::Successful,
         1 => CallResult::Failure,
         2 => CallResult::Revert,
-        _ => panic!(),
+        _ => CallResult::Unknown,
     }
 }
 
@@ -449,7 +451,7 @@ pub fn call_static(gas_limit: u64, address: &Address, data: &[u8]) -> CallResult
         0 => CallResult::Successful,
         1 => CallResult::Failure,
         2 => CallResult::Revert,
-        _ => panic!(),
+        _ => CallResult::Unknown,
     }
 }
 
@@ -470,7 +472,7 @@ pub fn create(value: &EtherValue, data: &[u8]) -> CreateResult {
         0 => CreateResult::Successful(address),
         1 => CreateResult::Failure,
         2 => CreateResult::Revert,
-        _ => panic!(),
+        _ => CreateResult::Unknown,
     }
 }
 
