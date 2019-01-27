@@ -9,7 +9,8 @@ jobs:
       - run:
           name: Update rustc
           command: |
-            rustup target add wasm32-unknown-unknown
+            rustup install nightly-x86_64-unknown-linux-gnu
+            rustup target add wasm32-unknown-unknown --toolchain nightly
             rustup component add rustfmt
             rustup update
       - run:
@@ -20,28 +21,28 @@ jobs:
       - run:
           name: Test
           command: |
-             cargo test --target=x86_64-unknown-linux-gnu
-             cargo test --release --target=x86_64-unknown-linux-gnu
+             cargo +nightly test --target=x86_64-unknown-linux-gnu
+             cargo +nightly test --release --target=x86_64-unknown-linux-gnu
       - run:
           name: Build
           command: |
              # debug
-             cargo build
+             cargo +nightly build
              # release
-             cargo build --release
+             cargo +nightly build --release
              # different allocators
-             cargo build --release --features wee_alloc
-             cargo build --release --features qimalloc
+             cargo +nightly build --release --features wee_alloc
+             cargo +nightly build --release --features qimalloc
              # different allocators (no_std)
-             cargo build --release --no-default-features --features wee_alloc
-             cargo build --release --no-default-features --features qimalloc
+             cargo +nightly build --release --no-default-features --features wee_alloc
+             cargo +nightly build --release --no-default-features --features qimalloc
              # different feature sets
-             cargo build --release --no-default-features
-             cargo build --release --features debug
-             cargo build --release --no-default-features --features debug
-             cargo build --release --features experimental
-             cargo build --release --no-default-features --features experimental
-             cargo build --release --features experimental,debug
-             cargo build --release --no-default-features --features experimental,debug
-             cargo build --release --features eth2
-             cargo build --release --no-default-features --features eth2
+             cargo +nightly build --release --no-default-features
+             cargo +nightly build --release --features debug
+             cargo +nightly build --release --no-default-features --features debug
+             cargo +nightly build --release --features experimental
+             cargo +nightly build --release --no-default-features --features experimental
+             cargo +nightly build --release --features experimental,debug
+             cargo +nightly build --release --no-default-features --features experimental,debug
+             cargo +nightly build --release --features eth2
+             cargo +nightly build --release --no-default-features --features eth2
