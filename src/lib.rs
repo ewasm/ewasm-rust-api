@@ -21,6 +21,9 @@
 mod native;
 pub mod types;
 
+#[cfg(not(feature = "std"))]
+pub mod convert;
+
 #[cfg(feature = "std")]
 use std::vec::Vec;
 
