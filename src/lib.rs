@@ -1,3 +1,5 @@
+#![cfg_attr(not(feature = "std"), no_std)]
+
 //! ewasm_api is a library used to interface with Ethereum's EEI in [Ewasm](https://github.com/ewasm/design), a set of enhancements to
 //! the Ethereum smart contract platform.
 //! ewasm_api exposes both a set of unsafe "native" functions representing the actual EEI
