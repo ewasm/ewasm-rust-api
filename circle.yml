@@ -20,7 +20,7 @@ jobs:
              git diff --exit-code
       - run:
           name: Test
-          command: cargo test
+          command: cargo test --target=x86_64-unknown-linux-gnu
       - run:
           name: Build
-          command: cargo build --release --target wasm32-unknown-unknown
+          command: cargo build --release
