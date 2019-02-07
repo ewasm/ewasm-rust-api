@@ -644,6 +644,12 @@ pub fn returndata_size() -> usize {
     unsafe { native::ethereum_getReturnDataSize() as usize }
 }
 
+/// Halts execution, reverts all changes to the state and consumes all gas.
+pub fn abort() -> ! {
+    /// TODO: use assembly block with `unreachable`
+    panic!()
+}
+
 /// Halts execution and reverts all changes to the state.
 pub fn revert() -> ! {
     unsafe {
