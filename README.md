@@ -10,7 +10,7 @@ This project aims to give a low-level and a high-level binding to ewasm from Rus
 Add the dependency, as usual:
 ```toml
 [dependencies]
-ewasm-api = "0.5"
+ewasm-api = "0.7"
 ```
 ```rust
 extern crate ewasm_api;

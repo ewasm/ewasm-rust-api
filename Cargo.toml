@@ -1,6 +1,6 @@
 [package]
 name = "ewasm_api"
-version = "0.6.0"
+version = "0.7.0"
 authors = ["Alex Beregszaszi <alex@rtfs.hu>", "Jake Lang <jak3lang@gmail.com>"]
 license = "Apache-2.0"
 repository = "https://github.com/ewasm/ewasm-rust-api"
