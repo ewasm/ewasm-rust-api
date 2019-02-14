@@ -202,7 +202,7 @@ pub fn log0(data: &[u8]) {
 }
 
 /// Appends log data with one topic.
-pub fn log1(data: &[u8], topic1: &Topic) {
+pub fn log1(data: &[u8], topic1: &LogTopic) {
     log(
         data,
         1,
@@ -214,7 +214,7 @@ pub fn log1(data: &[u8], topic1: &Topic) {
 }
 
 /// Appends log data with two topics.
-pub fn log2(data: &[u8], topic1: &Topic, topic2: &Topic) {
+pub fn log2(data: &[u8], topic1: &LogTopic, topic2: &LogTopic) {
     log(
         data,
         2,
@@ -226,7 +226,7 @@ pub fn log2(data: &[u8], topic1: &Topic, topic2: &Topic) {
 }
 
 /// Appends log data with three topics.
-pub fn log3(data: &[u8], topic1: &Topic, topic2: &Topic, topic3: &Topic) {
+pub fn log3(data: &[u8], topic1: &LogTopic, topic2: &LogTopic, topic3: &LogTopic) {
     log(
         data,
         3,
@@ -238,7 +238,13 @@ pub fn log3(data: &[u8], topic1: &Topic, topic2: &Topic, topic3: &Topic) {
 }
 
 /// Appends log data with four topics.
-pub fn log4(data: &[u8], topic1: &Topic, topic2: &Topic, topic3: &Topic, topic4: &Topic) {
+pub fn log4(
+    data: &[u8],
+    topic1: &LogTopic,
+    topic2: &LogTopic,
+    topic3: &LogTopic,
+    topic4: &LogTopic,
+) {
     log(
         data,
         4,
