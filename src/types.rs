@@ -35,7 +35,7 @@ pub type StorageKey = Bytes32;
 pub type StorageValue = Bytes32;
 
 /// Type representing a log topic.
-pub type Topic = Bytes32;
+pub type LogTopic = Bytes32;
 
 /// Type representing a Keccak-256 or SHA-256 hash.
 pub type Hash = Bytes32;
