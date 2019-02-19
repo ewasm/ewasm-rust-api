@@ -24,7 +24,7 @@ pub mod types;
 #[cfg(feature = "std")]
 use std::vec::Vec;
 
-use types::*;
+use crate::types::*;
 
 #[cfg(feature = "std")]
 fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
