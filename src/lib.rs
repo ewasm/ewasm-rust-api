@@ -21,6 +21,9 @@
 mod native;
 pub mod types;
 
+#[cfg(feature = "debug")]
+pub mod debug;
+
 #[cfg(not(feature = "std"))]
 pub mod convert;
 
