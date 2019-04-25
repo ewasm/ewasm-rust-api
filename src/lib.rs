@@ -18,6 +18,11 @@
 ///     finish_data(&a.bytes);
 /// }
 /// ```
+extern crate wee_alloc;
+
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+
 mod native;
 pub mod types;
 
