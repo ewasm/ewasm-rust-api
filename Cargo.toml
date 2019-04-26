@@ -7,6 +7,9 @@ repository = "https://github.com/ewasm/ewasm-rust-api"
 description = "ewasm API for Rust"
 edition = "2018"
 
+[dependencies]
+wee_alloc = "0.4.4"
+
 [features]
 default = [ "std" ]
 std = []
