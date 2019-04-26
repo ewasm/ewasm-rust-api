@@ -31,6 +31,9 @@ mod utils;
 #[cfg(feature = "debug")]
 pub mod debug;
 
+#[cfg(feature = "bignum")]
+pub mod bignum;
+
 #[cfg(not(feature = "std"))]
 pub mod convert;
 

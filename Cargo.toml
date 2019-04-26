@@ -14,3 +14,4 @@ wee_alloc = "0.4.4"
 default = [ "std" ]
 std = []
 debug = []
+bignum = []
