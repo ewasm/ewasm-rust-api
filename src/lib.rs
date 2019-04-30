@@ -19,10 +19,21 @@
 ///     finish_data(&a.bytes);
 /// }
 /// ```
-extern crate wee_alloc;
 
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+#[macro_use]
+extern crate cfg_if;
+
+cfg_if! {
+    if #[cfg(feature = "wee_alloc")] {
+        extern crate wee_alloc;
+        #[global_allocator]
+        static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+    } else if #[cfg(feature = "qimalloc")] {
+        extern crate qimalloc;
+        #[global_allocator]
+        static ALLOC: qimalloc::QIMalloc = qimalloc::QIMalloc::INIT;
+    }
+}
 
 mod native;
 pub mod types;
