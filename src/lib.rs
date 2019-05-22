@@ -11,7 +11,7 @@
 //! - `qimalloc`: Builds with [qimalloc](https://github.com/wasmx/qimalloc) as the global
 //! allocator.
 //! - `debug`: Exposes the debugging interface.
-//! - `experimental`: Exposes the experimental bignum system library API.
+//! - `experimental`: Exposes the experimental APIs (bignum system library, evm2wasm EEI)
 //!
 //! # Examples
 //! ```ignore
@@ -52,6 +52,7 @@ pub mod debug;
 
 #[cfg(feature = "experimental")]
 pub mod bignum;
+pub mod experimental;
 
 #[cfg(not(feature = "std"))]
 pub mod convert;
@@ -76,6 +77,7 @@ pub mod prelude {
 
     #[cfg(feature = "experimental")]
     pub use crate::bignum;
+    pub use crate::experimental;
 }
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
