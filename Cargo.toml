@@ -11,6 +11,7 @@ edition = "2018"
 wee_alloc = "0.4.4"
 
 [features]
-default = [ "std" ]
+default = [ "std", "eth2" ]
 std = []
 debug = []
+eth2 = []

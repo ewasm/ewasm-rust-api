@@ -29,6 +29,9 @@ pub mod types;
 #[cfg(feature = "debug")]
 pub mod debug;
 
+#[cfg(feature = "eth2")]
+pub mod eth2;
+
 #[cfg(not(feature = "std"))]
 pub mod convert;
 
