@@ -64,7 +64,7 @@ macro_rules! from_primitive_ref_impl {
 }
 
 macro_rules! from_type_for_primitive_impl {
-    ($f:ident, $to:ident, $size:expr) => {
+    ($f:ident, $size:expr, $to:ident) => {
         impl From<$f> for [$to; $size] {
             fn from(a: $f) -> Self {
                 a.bytes
@@ -83,10 +83,10 @@ from_primitive_ref_impl!(u8, 32, Uint256);
 from_primitive_ref_impl!(u8, 20, Bytes20);
 from_primitive_ref_impl!(u8, 32, Bytes32);
 
-from_type_for_primitive_impl!(Uint128, u8, 16);
-from_type_for_primitive_impl!(Uint256, u8, 32);
-from_type_for_primitive_impl!(Bytes20, u8, 20);
-from_type_for_primitive_impl!(Bytes32, u8, 32);
+from_type_for_primitive_impl!(Uint128, 16, u8);
+from_type_for_primitive_impl!(Uint256, 32, u8);
+from_type_for_primitive_impl!(Bytes20, 20, u8);
+from_type_for_primitive_impl!(Bytes32, 32, u8);
 
 #[cfg(test)]
 mod tests {
