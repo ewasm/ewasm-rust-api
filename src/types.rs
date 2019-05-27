@@ -1,23 +1,23 @@
 /// A little-endian unsigned 128-bit integer.
-#[derive(Default, Copy, Clone)]
+#[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Uint128 {
     pub bytes: [u8; 16],
 }
 
 /// A little-endian unsigned 256-bit integer.
-#[derive(Default, Copy, Clone)]
+#[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Uint256 {
     pub bytes: [u8; 32],
 }
 
 /// An array of 160 bits.
-#[derive(Default, Copy, Clone)]
+#[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Bytes20 {
     pub bytes: [u8; 20],
 }
 
 /// An array of 256 bits.
-#[derive(Default, Copy, Clone)]
+#[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Bytes32 {
     pub bytes: [u8; 32],
 }
