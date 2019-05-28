@@ -41,3 +41,5 @@ jobs:
              cargo build --release --no-default-features --features experimental
              cargo build --release --features experimental,debug
              cargo build --release --no-default-features --features experimental,debug
+             cargo build --release --features eth2
+             cargo build --release --no-default-features --features eth2
