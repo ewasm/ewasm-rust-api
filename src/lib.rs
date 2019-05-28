@@ -31,7 +31,7 @@ mod utils;
 #[cfg(feature = "debug")]
 pub mod debug;
 
-#[cfg(feature = "bignum")]
+#[cfg(feature = "experimental")]
 pub mod bignum;
 
 #[cfg(not(feature = "std"))]
