@@ -8,10 +8,12 @@ description = "ewasm API for Rust"
 edition = "2018"
 
 [dependencies]
-wee_alloc = "0.4.4"
+cfg-if = "0.1.7"
+wee_alloc = { version = "0.4.4", optional = true }
+qimalloc = { version = "0.1", optional = true }
 
 [features]
-default = [ "std" ]
+default = ["std", "wee_alloc"]
 std = []
 debug = []
 experimental = []
