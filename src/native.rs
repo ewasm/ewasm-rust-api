@@ -1,5 +1,6 @@
-/// The native host interface exposed to the ewasm contract. Do not use these functions unless, for
-/// some reason, the safe wrapper is not flexible enough.
+//! The low-level bindings for the Ethereum Environment Interface (EEI). There is a safe set of wrappers for these functions, so use
+//! those unless you are certain you know what you're doing.
+
 extern "C" {
     pub fn ethereum_useGas(amount: u64);
     pub fn ethereum_getGasLeft() -> u64;

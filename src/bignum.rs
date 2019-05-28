@@ -1,7 +1,8 @@
 //! The bignum system library.
+use crate::types::Uint256;
 
-use super::*;
-
+/// The low-level interface to the system library. Use the wrapper functions unless you know what
+/// you're doing.
 pub mod native {
     extern "C" {
         pub fn bignum_mul256(a: *const u32, b: *const u32, ret: *const u32);
@@ -9,6 +10,7 @@ pub mod native {
     }
 }
 
+/// Unsigned 256-bit multiplication.
 pub fn mul256(a: &Uint256, b: &Uint256) -> Uint256 {
     let mut ret = Uint256::default();
 
@@ -23,6 +25,7 @@ pub fn mul256(a: &Uint256, b: &Uint256) -> Uint256 {
     ret
 }
 
+/// Unsigned 256-bit multiplication modulo n.
 pub fn umulmod256(a: &Uint256, b: &Uint256, modulo: &Uint256) -> Uint256 {
     let mut ret = Uint256::default();
 

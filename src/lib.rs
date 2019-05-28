@@ -1,24 +1,31 @@
-/// ewasm_api is a library used to interface with Ethereum's EEI in Ewasm, a set of enhancements to
-/// the Ethereum smart contract platform.
-/// ewasm_api exposes both a set of unsafe "native" functions representing the actual EEI
-/// functions, and a set of safe wrappers around them. It is recommended not to use the native
-/// functions as they do not perform bounds-checking.
-///
-/// To use ewasm_api, simply include it as a dependency in your project.
-///
-/// # Examples
-/// ```ignore
-/// extern crate ewasm_api;
-///
-/// use ewasm_api::{Hash, block_hash, finish_data};
-///
-/// #[cfg(target_arch = "wasm32")]
-/// #[no_mangle]
-/// pub extern "C" fn main() {
-///     let a: Hash = block_hash(1);
-///     finish_data(&a.bytes);
-/// }
-/// ```
+//! ewasm_api is a library used to interface with Ethereum's EEI in [Ewasm](https://github.com/ewasm/design), a set of enhancements to
+//! the Ethereum smart contract platform.
+//! ewasm_api exposes both a set of unsafe "native" functions representing the actual EEI
+//! functions, and a set of safe wrappers around them. It is recommended not to use the native
+//! functions as they do not perform bounds-checking.
+//!
+//! To use ewasm_api, simply include it as a dependency in your project.
+//! ewasm_api can be built with various feature sets:
+//! - `default`: Builds with `wee_alloc` as the global allocator and with the Rust standard
+//! library.
+//! - `qimalloc`: Builds with [qimalloc](https://github.com/wasmx/qimalloc) as the global
+//! allocator.
+//! - `debug`: Exposes the debugging interface.
+//! - `experimental`: Exposes the experimental bignum system library API.
+//!
+//! # Examples
+//! ```ignore
+//! extern crate ewasm_api;
+//!
+//! use ewasm_api::{Hash, block_hash, finish_data};
+//!
+//! #[cfg(target_arch = "wasm32")]
+//! #[no_mangle]
+//! pub extern "C" fn main() {
+//!     let a: Hash = block_hash(1);
+//!     finish_data(&a.bytes);
+//! }
+//! ```
 
 #[macro_use]
 extern crate cfg_if;

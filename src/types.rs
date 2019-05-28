@@ -1,3 +1,5 @@
+//! High-level types commonly used in Ethereum contracts.
+
 /// A little-endian unsigned 128-bit integer.
 #[derive(Default, Copy, Clone, Debug, PartialEq, Eq)]
 pub struct Uint128 {
@@ -22,25 +24,25 @@ pub struct Bytes32 {
     pub bytes: [u8; 32],
 }
 
-/// Type representing a value in wei.
+/// Type definition representing a value in wei.
 pub type EtherValue = Uint128;
 
-/// Type representing an address.
+/// Type definition representing an address.
 pub type Address = Bytes20;
 
-/// Type representing a storage key.
+/// Type definition representing a storage key.
 pub type StorageKey = Bytes32;
 
-/// Type representing a storage value.
+/// Type definition representing a storage value.
 pub type StorageValue = Bytes32;
 
-/// Type representing a log topic.
+/// Type definition representing a log topic.
 pub type LogTopic = Bytes32;
 
-/// Type representing a Keccak-256 or SHA-256 hash.
+/// Type definition representing a Keccak-256 or SHA-256 hash.
 pub type Hash = Bytes32;
 
-/// Type representing a block's difficulty.
+/// Type definition representing a block's difficulty.
 pub type Difficulty = Uint256;
 
 macro_rules! from_primitive_impl {

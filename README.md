@@ -12,9 +12,19 @@ Add the dependency, as usual:
 [dependencies]
 ewasm-api = "0.8"
 ```
+
+In your project, include the prelude:
 ```rust
-extern crate ewasm_api;
+use ewasm_api::prelude::*;
 ```
+
+Other modules are available as well, outside of the prelude. Refer to the documentation for more info.
+
+`ewasm-rust-api` builds with various feature sets:
+- `default`: Builds with `wee_alloc` as the global allocator and with the Rust standard library.
+- `qimalloc`: Builds with [qimalloc](https://github.com/wasmx/qimalloc) as the global allocator.
+- `debug`: Exposes the debugging interface.
+- `experimental`: Exposes the experimental bignum system library API.
 
 Further documentation is available [here](https://docs.rs/ewasm_api/).
 
