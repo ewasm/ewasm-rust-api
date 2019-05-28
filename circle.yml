@@ -23,4 +23,10 @@ jobs:
           command: cargo test --target=x86_64-unknown-linux-gnu
       - run:
           name: Build
-          command: cargo build --release
+          command: |
+             cargo build --release
+             # debug
+             cargo build
+             cargo build --release --no-default-features
+             cargo build --release --features debug
+             cargo build --release --no-default-features --features debug
