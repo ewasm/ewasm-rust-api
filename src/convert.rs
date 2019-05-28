@@ -1,3 +1,6 @@
+//! Basic type conversion traits. Unlike the native standard library, `U: From<T>` does not yet
+//! imply `T: Into<U>`.
+
 use super::*;
 
 pub trait From<T>: Sized {
