@@ -539,7 +539,7 @@ pub fn returndata_size() -> usize {
 
 /// Halts execution, reverts all changes to the state and consumes all gas.
 pub fn abort() -> ! {
-    /// TODO: use assembly block with `unreachable`
+    // TODO: use assembly block with `unreachable`
     panic!()
 }
 
