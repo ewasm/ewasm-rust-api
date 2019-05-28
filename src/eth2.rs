@@ -6,19 +6,19 @@ use super::*;
 
 mod native {
     extern "C" {
-        pub fn eth2_loadPreState(offset: *const u32);
+        pub fn eth2_loadPreStateRoot(offset: *const u32);
         pub fn eth2_blockDataSize() -> u32;
         pub fn eth2_blockDataCopy(outputOfset: *const u32, offset: u32, length: u32);
-        pub fn eth2_savePostState(offset: *const u32);
+        pub fn eth2_savePostStateRoot(offset: *const u32);
         pub fn eth2_pushNewDeposit(offset: *const u32);
     }
 }
 
 /// Load current state root.
-pub fn load_pre_state() -> Bytes32 {
+pub fn load_pre_state_root() -> Bytes32 {
     let mut ret = Bytes32::default();
 
-    unsafe { native::eth2_loadPreState(ret.bytes.as_mut_ptr() as *const u32) }
+    unsafe { native::eth2_loadPreStateRoot(ret.bytes.as_mut_ptr() as *const u32) }
 
     ret
 }
@@ -58,6 +58,6 @@ pub fn block_data_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(),
 }
 
 /// Save new state root.
-pub fn save_post_state(state: Bytes32) {
-    unsafe { native::eth2_savePostState(state.bytes.as_ptr() as *const u32) }
+pub fn save_post_state_root(state: Bytes32) {
+    unsafe { native::eth2_savePostStateRoot(state.bytes.as_ptr() as *const u32) }
 }
