@@ -12,6 +12,7 @@
 ///
 /// use ewasm_api::{Hash, block_hash, finish_data};
 ///
+/// #[cfg(target_arch = "wasm32")]
 /// #[no_mangle]
 /// pub extern "C" fn main() {
 ///     let a: Hash = block_hash(1);
@@ -36,7 +37,7 @@ pub mod convert;
 #[cfg(feature = "std")]
 use std::vec::Vec;
 
-use crate::types::*;
+pub use crate::types::*;
 use crate::utils::*;
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
