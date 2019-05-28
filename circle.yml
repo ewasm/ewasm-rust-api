@@ -30,3 +30,7 @@ jobs:
              cargo build --release --no-default-features
              cargo build --release --features debug
              cargo build --release --no-default-features --features debug
+             cargo build --release --features experimental
+             cargo build --release --no-default-features --features experimental
+             cargo build --release --features experimental,debug
+             cargo build --release --no-default-features --features experimental,debug
