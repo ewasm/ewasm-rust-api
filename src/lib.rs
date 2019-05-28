@@ -36,8 +36,9 @@ cfg_if! {
 }
 
 mod native;
-pub mod types;
 mod utils;
+
+pub mod types;
 
 #[cfg(feature = "debug")]
 pub mod debug;
@@ -51,8 +52,24 @@ pub mod convert;
 #[cfg(feature = "std")]
 use std::vec::Vec;
 
-pub use crate::types::*;
-use crate::utils::*;
+use types::*;
+use utils::*;
+
+/// Re-export of all the basic features.
+pub mod prelude {
+    pub use crate::*;
+
+    pub use crate::types::*;
+
+    #[cfg(not(feature = "std"))]
+    pub use crate::convert::*;
+
+    #[cfg(feature = "debug")]
+    pub use crate::debug;
+
+    #[cfg(feature = "experimental")]
+    pub use crate::bignum;
+}
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
 /// `externalCodeCopy`, and `returnDataCopy`.
