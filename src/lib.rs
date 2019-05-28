@@ -25,6 +25,7 @@ static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 mod native;
 pub mod types;
+mod utils;
 
 #[cfg(feature = "debug")]
 pub mod debug;
@@ -36,15 +37,7 @@ pub mod convert;
 use std::vec::Vec;
 
 use crate::types::*;
-
-#[cfg(feature = "std")]
-fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
-    let mut ret: Vec<u8> = Vec::with_capacity(len);
-    unsafe {
-        ret.set_len(len);
-    }
-    ret
-}
+use crate::utils::*;
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
 /// `externalCodeCopy`, and `returnDataCopy`.
