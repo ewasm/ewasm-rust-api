@@ -24,15 +24,20 @@ jobs:
       - run:
           name: Build
           command: |
-             cargo build --release
              # debug
              cargo build
-             cargo build --release --no-default-features
+             # release
+             cargo build --release
+             # different allocators
+             cargo build --release --features wee_alloc
+             cargo build --release --features qimalloc
+             # different allocators (no_std)
+             cargo build --release --no-default-features --features wee_alloc
+             cargo build --release --no-default-features --features qimalloc
+             # different feature sets
              cargo build --release --features debug
              cargo build --release --no-default-features --features debug
              cargo build --release --features experimental
              cargo build --release --no-default-features --features experimental
              cargo build --release --features experimental,debug
              cargo build --release --no-default-features --features experimental,debug
-             cargo build --release --features wee_alloc
-             cargo build --release --features qimalloc
