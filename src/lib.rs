@@ -53,6 +53,9 @@ pub mod debug;
 #[cfg(feature = "experimental")]
 pub mod bignum;
 
+#[cfg(feature = "eth2")]
+pub mod eth2;
+
 #[cfg(not(feature = "std"))]
 pub mod convert;
 
