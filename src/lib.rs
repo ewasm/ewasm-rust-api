@@ -60,6 +60,7 @@ pub mod convert;
 use std::vec::Vec;
 
 use types::*;
+#[cfg(feature = "std")]
 use utils::*;
 
 /// Re-export of all the basic features.
