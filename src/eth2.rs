@@ -10,7 +10,7 @@ mod native {
         pub fn eth2_blockDataSize() -> u32;
         pub fn eth2_blockDataCopy(outputOfset: *const u32, offset: u32, length: u32);
         pub fn eth2_savePostStateRoot(offset: *const u32);
-        pub fn eth2_pushNewDeposit(offset: *const u32);
+        pub fn eth2_pushNewDeposit(offset: *const u32, length: u32);
     }
 }
 
@@ -55,6 +55,11 @@ pub fn block_data_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(),
         unsafe_block_data_copy(from, length, ret);
         Ok(())
     }
+}
+
+/// Push new deposit receipt.
+pub fn push_new_deposit(deposit: &[u8]) {
+    unsafe { native::eth2_pushNewDeposit(deposit.as_ptr() as *const u32, deposit.len() as u32) }
 }
 
 /// Save new state root.
