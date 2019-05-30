@@ -6,7 +6,7 @@
 //! ```
 //! use ewasm_api::prelude::*;
 //!
-//! fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> Bytes32 {
+//! fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> (Bytes32, Vec<u8>) {
 //!     unimplemented!()
 //! }
 //!
@@ -80,7 +80,7 @@ pub fn save_post_state_root(state: &Bytes32) {
 
 /// Create shard script entry point. Expects a function to process blocks with the signature:
 /// ```ignore
-/// fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> Bytes32 {}
+/// fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> (Bytes32, Vec<u8>) {}
 /// ```
 #[macro_export]
 macro_rules! eth2_shard_script {
@@ -91,8 +91,8 @@ macro_rules! eth2_shard_script {
             let pre_state_root = eth2::load_pre_state_root();
             // TODO: avoid using Vec here
             let block_data = eth2::acquire_block_data();
-            // TODO: support deposits here
-            let post_state_root = $process_block(&pre_state_root, &block_data);
+            let (post_state_root, deposits) = $process_block(&pre_state_root, &block_data);
+            eth2::push_new_deposit(&deposits);
             eth2::save_post_state_root(&post_state_root)
         }
     };
