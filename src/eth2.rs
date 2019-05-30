@@ -1,6 +1,17 @@
 //! This is the work in progress interface for Eth 2 Phase 2.
 //!
 //! Please check Ewasm [Scout](https://github.com/ewasm/scout) for more details.
+//!
+//! # Examples
+//! ```
+//! use ewasm_api::prelude::*;
+//!
+//! fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> Bytes32 {
+//!     unimplemented!()
+//! }
+//!
+//! eth2_shard_script!(process_block);
+//! ```
 
 use super::*;
 
@@ -65,4 +76,24 @@ pub fn push_new_deposit(deposit: &[u8]) {
 /// Save new state root.
 pub fn save_post_state_root(state: &Bytes32) {
     unsafe { native::eth2_savePostStateRoot(state.bytes.as_ptr() as *const u32) }
+}
+
+/// Create shard script entry point. Expects a function to process blocks with the signature:
+/// ```ignore
+/// fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> Bytes32 {}
+/// ```
+#[macro_export]
+macro_rules! eth2_shard_script {
+    ($process_block:ident) => {
+        #[cfg(target_arch = "wasm32")]
+        #[no_mangle]
+        pub extern "C" fn main() {
+            let pre_state_root = eth2::load_pre_state_root();
+            // TODO: avoid using Vec here
+            let block_data = eth2::acquire_block_data();
+            // TODO: support deposits here
+            let post_state_root = $process_block(&pre_state_root, &block_data);
+            eth2::save_post_state_root(&post_state_root)
+        }
+    };
 }
