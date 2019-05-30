@@ -63,6 +63,6 @@ pub fn push_new_deposit(deposit: &[u8]) {
 }
 
 /// Save new state root.
-pub fn save_post_state_root(state: Bytes32) {
+pub fn save_post_state_root(state: &Bytes32) {
     unsafe { native::eth2_savePostStateRoot(state.bytes.as_ptr() as *const u32) }
 }
