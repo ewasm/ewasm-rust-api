@@ -14,18 +14,29 @@
 //! - `experimental`: Exposes the experimental bignum system library API.
 //!
 //! # Examples
-//! ```ignore
-//! extern crate ewasm_api;
+//! ```
+//! use ewasm_api::prelude::*;
 //!
-//! use ewasm_api::{Hash, block_hash, finish_data};
+//! fn entry() {
+//!     let a: Hash = block_hash(1);
+//!     finish_data(&a.bytes);
+//! }
+//!
+//! ewasm_entry_point!(entry);
+//! ```
+//!
+//! Using lower-level primitives:
+//! ```ignore
+//! use ewasm_api::{types::Hash, block_hash, finish_data};
 //!
 //! #[cfg(target_arch = "wasm32")]
 //! #[no_mangle]
 //! pub extern "C" fn main() {
-//!     let a: Hash = block_hash(1);
+//!     let a: types::Hash = block_hash(1);
 //!     finish_data(&a.bytes);
 //! }
 //! ```
+//!
 
 #[macro_use]
 extern crate cfg_if;
@@ -83,6 +94,19 @@ pub mod prelude {
 
     #[cfg(feature = "eth2")]
     pub use crate::eth2;
+}
+
+/// Declare entry point for a contract. Expects a Rust function name to be executed.
+/// This will only compile in when using the wasm32 target.
+#[macro_export]
+macro_rules! ewasm_entry_point {
+    ($name:ident) => {
+        #[cfg(target_arch = "wasm32")]
+        #[no_mangle]
+        pub extern "C" fn main() {
+            $name()
+        }
+    };
 }
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
