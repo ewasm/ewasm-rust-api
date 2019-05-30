@@ -37,7 +37,6 @@ Other modules are available as well, outside of the prelude. Refer to the docume
 `ewasm-rust-api` builds with various feature sets:
 - `default`: Builds with `wee_alloc` as the global allocator and with the Rust standard library.
 - `qimalloc`: Builds with [qimalloc](https://github.com/wasmx/qimalloc) as the global allocator.
-- `debug`: Exposes the debugging interface.
 - `experimental`: Exposes the experimental bignum system library API.
 
 To enable specific features include the dependency as follows:
