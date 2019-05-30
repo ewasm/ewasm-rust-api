@@ -26,6 +26,13 @@ Other modules are available as well, outside of the prelude. Refer to the docume
 - `debug`: Exposes the debugging interface.
 - `experimental`: Exposes the experimental bignum system library API.
 
+To enable specific features include the dependency as follows:
+```toml
+[dependencies.ewasm_api]
+version = "0.9"
+default-features = false
+features = ["std", "qimalloc"]
+```
 Further documentation is available [here](https://docs.rs/ewasm_api/).
 
 ## Author(s)
