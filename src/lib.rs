@@ -80,6 +80,9 @@ pub mod prelude {
 
     #[cfg(feature = "experimental")]
     pub use crate::bignum;
+
+    #[cfg(feature = "eth2")]
+    pub use crate::eth2;
 }
 
 /// Enum representing an error code for EEI calls. Currently used by `codeCopy`, `callDataCopy`,
