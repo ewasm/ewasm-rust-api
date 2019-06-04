@@ -18,6 +18,20 @@ In your project, include the prelude:
 use ewasm_api::prelude::*;
 ```
 
+Additionally there is support for some macros to make creating contracts easier:
+```rust
+#[macro_use]
+extern crate ewasm_api;
+
+use ewasm_api::prelude::*;
+
+fn entry() {
+    // The actual contract code goes here.
+}
+
+ewasm_entry_point!(entry);
+```
+
 Other modules are available as well, outside of the prelude. Refer to the documentation for more info.
 
 `ewasm-rust-api` builds with various feature sets:
