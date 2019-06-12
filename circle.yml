@@ -19,7 +19,9 @@ jobs:
              cargo fmt --all -- --check
       - run:
           name: Test
-          command: cargo test --target=x86_64-unknown-linux-gnu
+          command: |
+             cargo test --target=x86_64-unknown-linux-gnu
+             cargo test --release --target=x86_64-unknown-linux-gnu
       - run:
           name: Build
           command: |
@@ -34,11 +36,8 @@ jobs:
              cargo build --release --no-default-features --features wee_alloc
              cargo build --release --no-default-features --features qimalloc
              # different feature sets
-             cargo build --release --features debug
-             cargo build --release --no-default-features --features debug
+             cargo build --release --no-default-features
              cargo build --release --features experimental
              cargo build --release --no-default-features --features experimental
-             cargo build --release --features experimental,debug
-             cargo build --release --no-default-features --features experimental,debug
              cargo build --release --features eth2
              cargo build --release --no-default-features --features eth2
