@@ -41,6 +41,13 @@
 #[macro_use]
 extern crate cfg_if;
 
+#[cfg(feature = "std")]
+use std::vec::Vec;
+
+use types::*;
+#[cfg(feature = "std")]
+use utils::*;
+
 cfg_if! {
     if #[cfg(feature = "wee_alloc")] {
         extern crate wee_alloc;
@@ -58,7 +65,7 @@ mod utils;
 
 pub mod types;
 
-#[cfg(feature = "debug")]
+#[macro_use]
 pub mod debug;
 
 #[cfg(feature = "experimental")]
@@ -70,30 +77,17 @@ pub mod eth2;
 #[cfg(not(feature = "std"))]
 pub mod convert;
 
-#[cfg(feature = "std")]
-use std::vec::Vec;
-
-use types::*;
-#[cfg(feature = "std")]
-use utils::*;
-
 /// Re-export of all the basic features.
 pub mod prelude {
-    pub use crate::*;
-
-    pub use crate::types::*;
-
-    #[cfg(not(feature = "std"))]
-    pub use crate::convert::*;
-
-    #[cfg(feature = "debug")]
-    pub use crate::debug;
-
     #[cfg(feature = "experimental")]
     pub use crate::bignum;
-
+    #[cfg(not(feature = "std"))]
+    pub use crate::convert::*;
+    pub use crate::debug;
     #[cfg(feature = "eth2")]
     pub use crate::eth2;
+    pub use crate::types::*;
+    pub use crate::*;
 }
 
 /// Declare entry point for a contract. Expects a Rust function name to be executed.
@@ -665,5 +659,100 @@ pub fn storage_store(key: &StorageKey, value: &StorageValue) {
 pub fn selfdestruct(address: &Address) -> ! {
     unsafe {
         native::ethereum_selfDestruct(address.bytes.as_ptr() as *const u32);
+    }
+}
+
+#[cfg(test)]
+mod debug_macros {
+    use crate::types::StorageKey;
+
+    #[cfg(debug_assertions)]
+    #[no_mangle]
+    pub fn debug_print32(_value: u32) {}
+
+    #[cfg(debug_assertions)]
+    #[no_mangle]
+    pub fn debug_print64(_value: u64) {}
+
+    #[cfg(debug_assertions)]
+    #[allow(non_snake_case)]
+    #[no_mangle]
+    pub fn debug_printMem(_offset: *const u32, _len: u32) {}
+
+    #[cfg(debug_assertions)]
+    #[allow(non_snake_case)]
+    #[no_mangle]
+    pub fn debug_printMemHex(_offset: *const u32, _len: u32) {}
+
+    #[cfg(debug_assertions)]
+    #[allow(non_snake_case)]
+    #[no_mangle]
+    pub fn debug_printStorage(_path_offset: *const u32) {}
+
+    #[cfg(debug_assertions)]
+    #[allow(non_snake_case)]
+    #[no_mangle]
+    pub fn debug_printStorageHex(_path_offset: *const u32) {}
+
+    #[test]
+    fn test_print32() {
+        let _v: u32 = 42;
+        print32!(_v);
+        print32!(42);
+        print32!(42 + 1);
+    }
+
+    #[test]
+    fn test_print64() {
+        let _v: u64 = 4242;
+        print64!(_v);
+        print64!(4242);
+        print64!(4242 + 1);
+    }
+
+    #[test]
+    fn test_print_mem() {
+        let _mem: [u8; 0] = [];
+        print_mem!(_mem);
+        let _mem: [u8; 3] = [0, 1, 2];
+        print_mem!(_mem);
+        let _mem = [0, 1, 2, 3, 4, 5];
+        print_mem!(_mem);
+        print_mem!([0, 1]);
+    }
+
+    #[test]
+    fn test_print_mem_hex() {
+        let _mem: [u8; 0] = [];
+        print_mem_hex!(_mem);
+        let _mem: [u8; 3] = [0, 1, 2];
+        print_mem_hex!(_mem);
+        let _mem = [0, 1, 2, 3, 4, 5];
+        print_mem_hex!(_mem);
+        print_mem_hex!([0, 1]);
+    }
+
+    #[test]
+    fn test_print_storage() {
+        let _key = StorageKey {
+            bytes: [
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+            ],
+        };
+        print_storage!(_key);
+    }
+
+    #[test]
+    fn test_print_storage_hex() {
+        let _key = StorageKey {
+            bytes: [
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+            ],
+        };
+        print_storage_hex!(_key);
     }
 }
