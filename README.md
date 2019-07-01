@@ -10,7 +10,7 @@ This project aims to give a low-level and a high-level binding to ewasm from Rus
 Add the dependency, as usual:
 ```toml
 [dependencies]
-ewasm-api = "0.9"
+ewasm-api = "0.10"
 ```
 
 In your project, include the prelude:
@@ -43,7 +43,7 @@ Other modules are available as well, outside of the prelude. Refer to the docume
 To enable specific features include the dependency as follows:
 ```toml
 [dependencies.ewasm_api]
-version = "0.9"
+version = "0.10"
 default-features = false
 features = ["std", "qimalloc"]
 ```
