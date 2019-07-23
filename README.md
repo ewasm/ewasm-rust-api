@@ -13,6 +13,12 @@ Add the dependency, as usual:
 ewasm-api = "0.10"
 ```
 
+Make sure the project is a library of `cdylib` type:
+```toml
+[lib]
+crate-type = ["cdylib"]
+```
+
 In your project, include the prelude:
 ```rust
 use ewasm_api::prelude::*;
