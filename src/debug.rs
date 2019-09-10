@@ -15,6 +15,11 @@ mod native {
     }
 }
 
+/// Prints a string.
+pub fn log(msg: &str) {
+    unsafe { native::debug_printMem(msg.as_ptr() as *const u32, msg.len() as u32) }
+}
+
 /// Prints an unsigned 32-bit int.
 pub fn print32(value: u32) {
     unsafe { native::debug_print32(value) }
