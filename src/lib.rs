@@ -10,7 +10,6 @@
 //! library.
 //! - `qimalloc`: Builds with [qimalloc](https://github.com/wasmx/qimalloc) as the global
 //! allocator.
-//! - `debug`: Exposes the debugging interface.
 //! - `experimental`: Exposes the experimental bignum system library API.
 //!
 //! # Examples
@@ -58,7 +57,6 @@ mod utils;
 
 pub mod types;
 
-#[cfg(feature = "debug")]
 pub mod debug;
 
 #[cfg(feature = "experimental")]
@@ -86,7 +84,6 @@ pub mod prelude {
     #[cfg(not(feature = "std"))]
     pub use crate::convert::*;
 
-    #[cfg(feature = "debug")]
     pub use crate::debug;
 
     #[cfg(feature = "experimental")]

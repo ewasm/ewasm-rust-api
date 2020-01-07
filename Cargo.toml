@@ -15,6 +15,5 @@ qimalloc = { version = "0.1", optional = true }
 [features]
 default = ["std", "wee_alloc"]
 std = []
-debug = []
 experimental = []
 eth2 = []

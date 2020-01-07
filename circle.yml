@@ -37,11 +37,9 @@ jobs:
              cargo build --release --no-default-features --features qimalloc
              # different feature sets
              cargo build --release --no-default-features
-             cargo build --release --features debug
-             cargo build --release --no-default-features --features debug
              cargo build --release --features experimental
              cargo build --release --no-default-features --features experimental
-             cargo build --release --features experimental,debug
-             cargo build --release --no-default-features --features experimental,debug
              cargo build --release --features eth2
              cargo build --release --no-default-features --features eth2
+             cargo build --release --features experimental,eth2
+             cargo build --release --no-default-features --features experimental,eth2
