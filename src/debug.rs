@@ -16,7 +16,8 @@ mod native {
 }
 
 /// Prints a string.
-pub fn log(msg: &str) {
+pub fn log<T: AsRef<str>>(msg: T) {
+    let msg = msg.as_ref();
     unsafe { native::debug_printMem(msg.as_ptr() as *const u32, msg.len() as u32) }
 }
 
@@ -31,12 +32,14 @@ pub fn print64(value: u64) {
 }
 
 /// Prints the contents of a slice.
-pub fn print_mem(slice: &[u8]) {
+pub fn print_mem<T: AsRef<[u8]>>(slice: T) {
+    let slice = slice.as_ref();
     unsafe { native::debug_printMem(slice.as_ptr() as *const u32, slice.len() as u32) }
 }
 
 /// Prints the contents of a slice in hexadecimal format.
-pub fn print_mem_hex(slice: &[u8]) {
+pub fn print_mem_hex<T: AsRef<[u8]>>(slice: T) {
+    let slice = slice.as_ref();
     unsafe { native::debug_printMemHex(slice.as_ptr() as *const u32, slice.len() as u32) }
 }
 
