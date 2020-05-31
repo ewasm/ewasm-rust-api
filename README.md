@@ -10,7 +10,7 @@ This project aims to give a low-level and a high-level binding to ewasm from Rus
 Add the dependency, as usual:
 ```toml
 [dependencies]
-ewasm-api = "0.11"
+ewasm_api = "0.11"
 ```
 
 Make sure the project is a library of `cdylib` type:
