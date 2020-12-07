@@ -15,6 +15,7 @@ pub fn unsafe_alloc_buffer(len: usize) -> Vec<u8> {
 mod tests {
     use super::*;
 
+    #[cfg(feature = "std")]
     #[test]
     fn smoke() {
         let ret = unsafe_alloc_buffer(42);
