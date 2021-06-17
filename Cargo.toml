@@ -1,9 +1,9 @@
 [package]
-name = "ewasm_api"
+name = "ss_ewasm_api"
 version = "0.11.0"
-authors = ["Alex Beregszaszi <alex@rtfs.hu>", "Jake Lang <jak3lang@gmail.com>"]
+authors = ["Alex Beregszaszi <alex@rtfs.hu>", "Jake Lang <jak3lang@gmail.com>", "Antonio Yang <yanganto@gmail.com>"]
 license = "Apache-2.0"
-repository = "https://github.com/ewasm/ewasm-rust-api"
+repository = "https://github.com/second-state/ewasm-rust-api"
 description = "ewasm API for Rust"
 edition = "2018"
 
