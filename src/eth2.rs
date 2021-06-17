@@ -10,18 +10,19 @@
 //!     unimplemented!()
 //! }
 //!
-//! eth2_shard_script!(process_block);
+//! shard_script!(process_block);
 //! ```
 
 use super::*;
 
 mod native {
+    #[link(wasm_import_module = "eth2")]
     extern "C" {
-        pub fn eth2_loadPreStateRoot(offset: *const u32);
-        pub fn eth2_blockDataSize() -> u32;
-        pub fn eth2_blockDataCopy(outputOfset: *const u32, offset: u32, length: u32);
-        pub fn eth2_savePostStateRoot(offset: *const u32);
-        pub fn eth2_pushNewDeposit(offset: *const u32, length: u32);
+        pub fn loadPreStateRoot(offset: *const u32);
+        pub fn blockDataSize() -> u32;
+        pub fn blockDataCopy(outputOfset: *const u32, offset: u32, length: u32);
+        pub fn savePostStateRoot(offset: *const u32);
+        pub fn pushNewDeposit(offset: *const u32, length: u32);
     }
 }
 
@@ -29,20 +30,20 @@ mod native {
 pub fn load_pre_state_root() -> Bytes32 {
     let mut ret = Bytes32::default();
 
-    unsafe { native::eth2_loadPreStateRoot(ret.bytes.as_mut_ptr() as *const u32) }
+    unsafe { native::loadPreStateRoot(ret.bytes.as_mut_ptr() as *const u32) }
 
     ret
 }
 
 /// Returns the length of the "block data" supplied with the current block.
 pub fn block_data_size() -> usize {
-    unsafe { native::eth2_blockDataSize() as usize }
+    unsafe { native::blockDataSize() as usize }
 }
 
 /// Copies a slices from the "block data", but does not check for overflow.
 pub fn unsafe_block_data_copy(from: usize, length: usize, ret: &mut [u8]) {
     unsafe {
-        native::eth2_blockDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
+        native::blockDataCopy(ret.as_mut_ptr() as *const u32, from as u32, length as u32);
     }
 }
 
@@ -70,12 +71,12 @@ pub fn block_data_copy(from: usize, length: usize, ret: &mut [u8]) -> Result<(),
 
 /// Push new deposit receipt.
 pub fn push_new_deposit(deposit: &[u8]) {
-    unsafe { native::eth2_pushNewDeposit(deposit.as_ptr() as *const u32, deposit.len() as u32) }
+    unsafe { native::pushNewDeposit(deposit.as_ptr() as *const u32, deposit.len() as u32) }
 }
 
 /// Save new state root.
 pub fn save_post_state_root(state: &Bytes32) {
-    unsafe { native::eth2_savePostStateRoot(state.bytes.as_ptr() as *const u32) }
+    unsafe { native::savePostStateRoot(state.bytes.as_ptr() as *const u32) }
 }
 
 /// Create shard script entry point. Expects a function to process blocks with the signature:
@@ -83,7 +84,7 @@ pub fn save_post_state_root(state: &Bytes32) {
 /// fn process_block(pre_state_root: &Bytes32, block_data: &[u8]) -> (Bytes32, Vec<u8>) {}
 /// ```
 #[macro_export]
-macro_rules! eth2_shard_script {
+macro_rules! shard_script {
     ($process_block:ident) => {
         #[cfg(target_arch = "wasm32")]
         #[no_mangle]
